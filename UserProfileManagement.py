@@ -30,6 +30,7 @@ class UserProfileManagement:
 
     def delete_user(self, user_id):
         print("all good")   # need to work on
+        print("something")
 
 
     def edt_user(self, user_id):
