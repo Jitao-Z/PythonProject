@@ -4,15 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="e43d3b18-063a-4513-ad6c-d7445b6dc72e" name="Changes" comment="second commit">
-      <change afterPath="$PROJECT_DIR$/data/testRead.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/data/testWrite.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/JsonReaderTest.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/test/UPMTest.py" afterDir="false" />
+    <list default="true" id="e43d3b18-063a-4513-ad6c-d7445b6dc72e" name="Changes" comment="done User and UPM classes with tests">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/User.py" beforeDir="false" afterPath="$PROJECT_DIR$/User.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserProfileManagement.py" beforeDir="false" afterPath="$PROJECT_DIR$/UserProfileManagement.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/profiles.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/profiles.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,7 +92,7 @@
       <workItem from="1755005212872" duration="443000" />
       <workItem from="1755005822744" duration="18000" />
       <workItem from="1755008601685" duration="1876000" />
-      <workItem from="1755051356489" duration="5974000" />
+      <workItem from="1755051356489" duration="6615000" />
     </task>
     <task id="LOCAL-00001" summary="Initial commit">
       <option name="closed" value="true" />
@@ -116,7 +110,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755008671075</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="done User and UPM classes with tests">
+      <option name="closed" value="true" />
+      <created>1755057669520</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1755057669520</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -136,12 +138,13 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial commit" />
     <MESSAGE value="second commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="second commit" />
+    <MESSAGE value="done User and UPM classes with tests" />
+    <option name="LAST_COMMIT_MESSAGE" value="done User and UPM classes with tests" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/PythonProject$User.coverage" NAME="User Coverage Results" MODIFIED="1754960897629" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonProject$test.coverage" NAME="test Coverage Results" MODIFIED="1755056471586" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/PythonProject$UPMTest.coverage" NAME="UPMTest Coverage Results" MODIFIED="1755056762563" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
-    <SUITE FILE_PATH="coverage/PythonProject$JsonReaderTest.coverage" NAME="JsonReaderTest Coverage Results" MODIFIED="1755057240346" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
+    <SUITE FILE_PATH="coverage/PythonProject$JsonReaderTest.coverage" NAME="JsonReaderTest Coverage Results" MODIFIED="1755057572259" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
   </component>
 </project>
