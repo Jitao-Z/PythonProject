@@ -5,8 +5,8 @@ from User import User
 class UserProfileManagement:
 
     def __init__(self, path):  # always set this as path: './data/profiles.json'
-        self.users = []
         self.STORAGE_PATH = path
+        self.users = []
         # self.users = self.load_users()
 
     def load_users(self):

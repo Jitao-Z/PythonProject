@@ -1,0 +1,18 @@
+[
+    {
+        "property_id": 1,
+        "location": "Ottawa",
+        "type": "cabin",
+        "nightly_price": 150,
+        "features": ["lake access", "WiFi", "fireplace"],
+        "tags": ["remote", "family-friendly"]
+    },
+    {
+        "property_id": 2,
+        "location": "Vancouver",
+        "type": "condo",
+        "nightly_price": 220,
+        "features": ["city view", "WiFi", "gym"],
+        "tags": ["nightlife", "city"]
+    }
+]

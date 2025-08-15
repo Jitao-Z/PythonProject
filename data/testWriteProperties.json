@@ -1,0 +1,41 @@
+[
+    {
+        "location": "Toronto",
+        "type": "house",
+        "nightly_price": 500,
+        "features": [
+            "TV",
+            "Hot hub",
+            "Pet friendly"
+        ],
+        "tags": [
+            "remote",
+            "nightlife"
+        ]
+    },
+    {
+        "location": "Vancouver",
+        "type": "cabin",
+        "nightly_price": 430,
+        "features": [
+            "parking",
+            "gym"
+        ],
+        "tags": [
+            "urban",
+            "lakefront"
+        ]
+    },
+    {
+        "location": "Montreal",
+        "type": "condo",
+        "nightly_price": 650,
+        "features": [
+            "garden",
+            "patio"
+        ],
+        "tags": [
+            "quiet"
+        ]
+    }
+]
