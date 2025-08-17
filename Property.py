@@ -1,26 +1,32 @@
-class Property:
-    def __init__(self, location, type, nightly_price, features, tags):
-        self.location = location
-        self.type = type
-        self.nightly_price = nightly_price
-        self.features = features
-        self.tags = tags
+# Ignore this file unless you are creating a Property instance!!!
 
-    def to_dict(self):
-        return {
-            "location": self.location,
-            "type": self.type,
-            "nightly_price": self.nightly_price,
-            "features": self.features,
-            "tags": self.tags
-        }
 
-    @classmethod
-    def from_dict(cls, data):
-        return cls(
-            location = data['location'],
-            type = data['type'],
-            nightly_price = data['nightly_price'],
-            features = data["features"],
-            tags = data["tags"]
-        )
+# class Property:
+#     def __init__(self, property_id, location, maxPeople, nightly_price, environ, features):
+#         self.property_id = property_id
+#         self.location = location
+#         self.maxPeople = maxPeople
+#         self.nightly_price = nightly_price
+#         self.environ = environ
+#         self.features = features
+#
+#     def to_dict(self):
+#         return {
+#             "property_id": self.property_id,
+#             "location": self.location,
+#             "maxPeople": self.maxPeople,
+#             "nightly_price": self.nightly_price,
+#             "environ": self.environ,
+#             "features": self.features
+#         }
+#
+#     @classmethod
+#     def from_dict(cls, data):
+#         return cls(
+#             property_id = data["property_id"],
+#             location = data['location'],
+#             maxPeople= data['maxPeople'],
+#             nightly_price = data['nightly_price'],
+#             environ = data['environ'],
+#             features = data["features"],
+#         )
