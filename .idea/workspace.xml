@@ -5,17 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43d3b18-063a-4513-ad6c-d7445b6dc72e" name="Changes" comment="basic structure of the app is done!">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NestApp.py" beforeDir="false" afterPath="$PROJECT_DIR$/NestApp.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Property.py" beforeDir="false" afterPath="$PROJECT_DIR$/Property.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/PropertyListings.py" beforeDir="false" afterPath="$PROJECT_DIR$/PropertyListings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserProfileManagement.py" beforeDir="false" afterPath="$PROJECT_DIR$/UserProfileManagement.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/profiles.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/profiles.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/testWrite.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/testWrite.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/JsonReaderTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/JsonReaderTest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/PLTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/PLTest.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/UPMTest.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/UPMTest.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -162,7 +152,6 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-e03c56caf84a-JavaScript-PY-252.23892.439" />
         <option value="bundled-python-sdk-b3ae9b5d7125-f0eec537fc84-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.23892.439" />
       </set>
     </attachedChunks>

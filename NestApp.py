@@ -197,7 +197,56 @@ class NestApp:
         self.userProfileManagement.add_user(user)   # this is where method in UserProfileManagement takes place
         print(f"Welcome on board, {name}!\nYour UID is {user.user_id}\nPlease copy your UID and save it somewhere, as this is your unique token!")
 
+    # Option 2: Editing existing user based on UID.
+    def edit_user(self):
+        input_id = input("Enter your UID:")
+        for u in self.userProfileManagement.users:
+            if u.user_id == input_id:
+                print("\nSelect the following features to change:")
+                print("\t1 -> Edit name")
+                print("\t2 -> Edit travel preferences")
 
+                request = int(input("Enter choice:"))
+                if request == 1:
+                    name = input("Enter new name:")
+                    u.update_name(name)
+                elif request == 2:
+                    destination = input("Enter new destination (enter 0 if you don't want to change destination):")
+                    if destination != "0":
+                        u.update_destination(destination)
+
+                    size = int(input("Enter new group size (enter 0 if you don't want to change size):"))
+                    if size != 0:
+                        u.update_group_size(size)
+
+                    budget = int(input("Enter new travel budget (enter 0 if you don't want to change budget):"))
+                    if budget != 0:
+                        u.update_budget(budget)
+
+                    print("Enter the characteristics of your new preferred environment, separated by commas without spaces (e.g., quiet,beachfront)."
+                          , "Enter 0 if you don't want to change field.")
+                    env = input()
+                    env_list = [e.strip() for e in env.split(",") if e.strip()]
+                    if env != "0":
+                        u.update_environment(env_list)
+
+                    print(
+                        "Enter the features that you want to have in your home, separated by commas without spaces (e.g., wifi,microwave oven)."
+                    , "Enter 0 if you don't want to change field.")
+                    features = input()
+                    feature_list = [feature.strip() for feature in features.split(",") if feature.strip()]
+                    if features != "0":
+                        u.update_features(feature_list)
+                else:
+                    print("Please enter a valid choice!")
+                print('User profile edited!')
+                print(f'\nUID: {u.user_id}')
+                print('-'*30)
+                print(f'Name: {u.name}')
+                print(f'Group Size: {u.group_size} | Budget: {u.budget}')
+                print(f'Destination: {u.destination} | Environment: {u.pre_environ} | Features: {u.features}')
+            else:
+                print("\nPlease enter a valid UID!")
 
     # Option 4: match a user with properties
     def matchUser(self):
@@ -345,6 +394,7 @@ class NestApp:
             self.createUser()
         elif instruction == "2":
             print("View a user")
+            self.edit_user()
         elif instruction == "3":
             print("Edit an existing profile")
         elif instruction == "4":
