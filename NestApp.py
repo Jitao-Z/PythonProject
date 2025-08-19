@@ -213,7 +213,7 @@ class NestApp:
 
     # Option 3: Editing existing user based on UID.
     def edit_user(self):
-        input_id = input("Enter your UID:")
+        input_id = input("Enter UID that you want to edit:")
         for u in self.userProfileManagement.users:
             if u.user_id == input_id:
                 print("\nSelect the following features to change:")
@@ -409,7 +409,6 @@ class NestApp:
         elif instruction == "2":
             print("View a user")
         elif instruction == "3":
-            print("Edit an existing profile")
             self.edit_user()
         elif instruction == "4":
             self.matchUser()
