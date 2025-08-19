@@ -1,13 +1,11 @@
 import json
 import random
 import uuid
-
-
 from User import User
 from UserProfileManagement import UserProfileManagement
-
-import numpy as np
 import pandas as pd
+import requests, getpass
+
 
 # Generate random properties from a fixed pool of words
 # We can consider this as our own dataset
@@ -58,6 +56,61 @@ FEATURE_POOL = [
 ]
 
 
+
+# LLM Preparations
+OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
+MODEL = "deepseek/deepseek-chat-v3-0324:free"
+
+# Safely input your key (won't echo in Colab)
+API_KEY = getpass.getpass("Enter your OpenRouter API key (input is hidden): ").strip()
+HEADERS = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
+
+SYSTEM_PROMPT = (
+    "You are a helpful assistant for an Airbnb-like vacation property search. "
+    "Given a list of PROPERTIES (JSON), suggest 3 fun and relevant activities for each property based on its location, environs and features and return JSON with keys with this format: "
+    "{'property_ids': int, 'suggested_activities: list[str]'}. Return ONLY valid JSON."
+)   # change prompt a bit: specifically:, environs
+
+def llm_suggest_activities(self, properties, user_prompt, model=MODEL, temperature=0.7):
+    payload = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": SYSTEM_PROMPT},
+            {
+                "role": "user",
+                "content": (
+                        "PROPERTIES:\n" + json.dumps(properties) +
+                        "\n\nUSER REQUEST:\n" + user_prompt
+                ),
+            },
+        ],
+        "temperature": temperature,
+    }
+    r = requests.post(OPENROUTER_URL, headers=HEADERS, json=payload, timeout=60)
+    if r.status_code != 200:
+        return {"error": f"HTTP {r.status_code}", "details": r.text}
+    data = r.json()
+    content = (data.get("choices") or [{}])[0].get("message", {}).get("content")
+    if not content:
+        return {"error": "Empty response", "raw": data}
+    try:
+        return json.loads(content)
+    except json.JSONDecodeError:
+        # Fallback: try to extract JSON substring
+        s, e = content.find("{"), content.rfind("}")
+        if s != -1 and e != -1 and e > s:
+            try:
+                return json.loads(content[s:e + 1])
+            except json.JSONDecodeError:
+                return {"error": "Non-JSON content", "raw": content}
+        return {"error": "Non-JSON content", "raw": content}
+
+
+
+############################################################ Everything above is preparation: generate properties, LLM setup #################################################################
+
+
+
 # This is where our program officially starts
 class NestApp:
     # Some set-ups
@@ -67,7 +120,7 @@ class NestApp:
         self.properties = generate_properties()
 
         # Whether to load previously auto-saved users
-        choice = input("Do you want to load previously saved users? (y/n): ").lower()
+        choice = input("Welcome to Nest! Would you like to load previously saved users? (y/n): ").lower()
         if choice == "y":
             self.userProfileManagement = UserProfileManagement(users_path)
             self.userProfileManagement.users = self.userProfileManagement.load_users()
@@ -87,54 +140,119 @@ class NestApp:
             self.displayMenu()
             instruction = input("Enter choice: ").lower()
 
-            if instruction == "q":
+            if instruction == "6":
                 keepGoing = False
                 print("Thank you for using Nest! See you soon!")
             else:
                 self.proceedOtherOptions(instruction)
 
 
-    # The user chooses to create a new user
+    # Option 1: Create a new user
     def createUser(self):
         print("User Name: ")
         name = input()
 
         print("Destination: (e.g. Quebec City, Vancouver)")
-        destination = input()
+        destination = input().title()
+        print(f"Your destination is {destination}")
 
-        print("Group Size: (e.g. 1-12)")
-        size = int(input())
+        while True:
+            print("Group Size: (1-12)")
+            try:
+                size = int(input())
+                if 1 <= size <= 12:
+                    print(f"Group size set to {size}")
+                    break
+                else:
+                    print("⚠️ Please input a number in the range 1-12.")
+            except ValueError:
+                print("⚠️ Please input an integer.")
+                return
 
-        print("Budget: (e.g. 50-600)")
-        budget = float(input())
 
-        print("Enter the characteristics of your preferred environment, separated by commas without spaces (e.g., quiet,beachfront). Please provide as many as possible: ")
+        while True:
+            print("Budget: (50-600)")
+            try:
+                budget = float(input())
+                if 50 <= budget <= 600:
+                    print(f"Budget set to {budget}")
+                    break
+                else:
+                    print("⚠️ Please input a number in the range 50-600.")
+            except ValueError:
+                print("⚠️ Please input a valid number.")
+                return
+
+        print("Enter the characteristics of your preferred environment (e.g. quiet, beachfront) (comma separated): ")
         environ_input = input()
-        environ_list = [environment.strip() for environment in environ_input.split(",") if environment.strip()]
+        environ_list = [env.strip() for env in environ_input.split(",")]
         print("Your selected environments:", environ_list)
 
-        print("Enter the features that you want to have in your home, separated by commas without spaces (e.g., wifi,microwave oven). Please provide as many as possible: ")
+        print("Enter the features you want in your home (e.g. wifi, microwave oven) (comma separated): ")
         feature_input = input()
-        feature_list = [feature.strip() for feature in feature_input.split(",") if feature.strip()]
+        feature_list = [fea.strip() for fea in feature_input.split(",")]
         print("Your selected features:", feature_list)
 
         user = User(user_id=str(uuid.uuid4()), name=name, destination=destination, group_size=size, budget=budget, pre_environ=environ_list, features=feature_list)
         self.userProfileManagement.add_user(user)   # this is where method in UserProfileManagement takes place
-        print(f"Welcome on board, {name}! Your UID is {user.user_id}")
+        print(f"Welcome on board, {name}!\nYour UID is {user.user_id}\nPlease copy your UID and save it somewhere, as this is your unique token!")
 
-        # TODO needs to done here; the second elif can apply the LLM implementation; can do this at the very end
-        movingOn: bool = True
-        while movingOn:
-            self.displayMatchMenu()
-            match_instruction = input("Enter choice: ").lower()
-            if match_instruction == "a":
-                self.match(user)
-                movingOn = False
-            elif match_instruction == "b":
-                print("ai and chatbot is coming")
-                break
-            else:
-                print("That is not cool! Please choose again!")
+
+
+    # Option 4: match a user with properties
+    def matchUser(self):
+        user_id = input("Enter your UID: ")
+        user_found = self.userProfileManagement.find_user(user_id)   # we can use find_user method in userProfileManagement to locate a user very easily
+        if user_found is None:
+            print("Come back when you recall your UID!")
+        else:
+            matched_df = self.match(user_found)   # return a df in order to do LLM
+
+            # LLM starts
+            while True:
+                answer = input("Would you like to see suggested activities for your top properties? (y/n) ")
+                if answer == "y":
+                    # shorten the columns used for faster results
+                    llm_cols = ["property_id", "location", "environ", "features"]
+                    llm_input = matched_df[llm_cols].to_dict(orient="records")
+                    prompt = "suggest 3 fun and relevant activities for each property"
+                    result = llm_suggest_activities(self, properties=llm_input, user_prompt=prompt)
+
+                    # extract the raw text
+                    raw_text = result.get("raw", json.dumps(result))
+                    raw_text = raw_text.replace("```json", "").replace("```", "").strip()
+
+                    # parse through the JSON result
+                    activities_list = []
+                    try:
+                        parsed = json.loads(raw_text)
+                        if isinstance(parsed, dict):
+                            activities_list = [parsed]
+                        elif isinstance(parsed, list):
+                            activities_list = [obj for obj in parsed if isinstance(obj, dict)]
+                    except json.JSONDecodeError:
+                        print("Error: could not parse through the activities.")
+
+                    # print activities
+                    for row in matched_df.itertuples():
+                        prop_id = int(row.property_id)
+                        acts = []
+                        for a in activities_list:
+                            if isinstance(a, dict) and a.get("property_id") == prop_id:
+                                acts.extend(a.get("suggested_activities", []))
+                        print(f"\nProperty ID {prop_id}, Location: {row.location}")
+                        if acts:
+                            for act in acts:
+                                print(f" - {act}")
+                        else:
+                            print(" No activities found!")
+                    break
+                elif answer == "n":
+                    break
+                else:
+                    print("Not a valid response.")
+
+
 
 
     # very central to our program
@@ -147,7 +265,7 @@ class NestApp:
         df = df[df['location'] == user.destination].copy()
         if df.empty:
             print("No properties match the user's destination.")
-            return
+            return None
 
         # Group size scoring
         def score_group_size(max_people):
@@ -211,39 +329,43 @@ class NestApp:
                 'display.max_columns', None,  # show all columns
                 'display.max_colwidth', None  # show full column content, no truncation
         ):
-            print(top5[['property_id', 'location', 'nightly_price', 'environ', 'features', 'final_score']].reset_index(drop=True))
+            print(top5[['property_id', 'location', 'nightly_price', 'environ', 'features',
+                        'final_score']].reset_index(drop=True))
             print("Have a pleasant stay!")
 
-
-    # Display the matching menu
-    def displayMatchMenu(self):
-        print("\nNow let's find your ideal summer home!!!")
-        print("\ta -> Match with our own dataset")
-        print("\tb -> Match our chat bot")
+        return top5
 
 
-    # TODO: Not done here!!!! Three more functionalities to go!!! This should be the starting point
+
+
+
+    # TODO: Not done here!!!! This should be the starting point!!!
     def proceedOtherOptions(self, instruction):
-        if instruction == "c":
+        if instruction == "1":
             self.createUser()
-        elif instruction == "e":
-            print("edit a user")
-        elif instruction == "d":
-            print("delete a user")
-        elif instruction == "v":
-            print("view all current users")
+        elif instruction == "2":
+            print("View a user")
+        elif instruction == "3":
+            print("Edit an existing profile")
+        elif instruction == "4":
+            self.matchUser()
+        elif instruction == "5":
+            print("delete")
         else:
             print("Your selection is not valid. Try again!")
 
 
     # Display the main menu
     def displayMenu(self):
-        print("\nWelcome to Nest! Please select from:")
-        print("\tc -> Create a user")
-        print("\te -> Edit a user")
-        print("\td -> Delete a user")
-        print("\tv -> View all current users")
-        print("\tq -> quit")
+        print("""Please enter:
+            1 to Add a user,
+            2 to View a user,
+            3 to Edit an existing profile,
+            4 to Get recommended properties for an existing profile and (optional) to get suggested activities for your recommended properties,
+            5 to Delete an existing user,
+            6 to Exit.""")
+
+
 
 
 

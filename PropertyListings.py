@@ -1,9 +1,13 @@
-# Ignore this file unless you are creating a list of Property instances!!!
+# It is very likely that you don't need this file
+# I am just putting it here as a backup
+
+
 
 
 # import json
-#
 # from Property import Property
+#
+#
 #
 #
 # class PropertyListings:

@@ -1,1 +1,19 @@
-[]
+[
+    {
+        "user_id": "056df04c-572f-4081-a6a4-652d36cc6de8",
+        "name": "Harry Potter",
+        "destination": "Vancouver",
+        "group_size": 7,
+        "budget": 450.0,
+        "preferred_environment": [
+            "quiet",
+            "chill",
+            "beach",
+            "sunshine"
+        ],
+        "features": [
+            "wifi",
+            "air conditioning"
+        ]
+    }
+]

@@ -1,4 +1,5 @@
-# Ignore this file unless you are creating a Property instance!!!
+# It is very likely that you don't need this file
+# I am just putting it here as a backup
 
 
 # class Property:

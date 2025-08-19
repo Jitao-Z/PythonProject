@@ -30,12 +30,20 @@ class UserProfileManagement:
     def add_user(self, user:User):
         self.users.append(user)
         self.save_users()   # make it auto-save
-        print(f"New user {user.user_id} created successfully!")
+        # print(f"New user {user.user_id} created successfully!")
 
     def delete_user(self, user:User):
         self.users.remove(user)
         self.save_users()
-        print(f"User {user.user_id} deleted successfully!")
+        # print(f"User {user.user_id} deleted successfully!")
+
+    def find_user(self, user_id):
+        for u in self.users:
+            if u.user_id == user_id:
+                print(f"Found user with id {u.user_id}")
+                return u
+        print("User not found.")
+        return None
 
     def view_users(self):
         for u in self.users:
