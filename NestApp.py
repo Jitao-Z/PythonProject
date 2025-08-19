@@ -57,6 +57,18 @@ FEATURE_POOL = [
 
 
 
+# Attempt to read in and use LLM Generated Properties by Joanne
+# def load_properties(self, path):
+#     try:
+#         with open(path, "r") as f:
+#             data = json.load(f)
+#             return [Property.from_dict(u) for u in data]
+#     except FileNotFoundError:
+#         print(f"File {path} not found. Returning empty list.")
+#         return []
+
+
+
 # LLM Preparations
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 MODEL = "deepseek/deepseek-chat-v3-0324:free"
@@ -116,7 +128,8 @@ class NestApp:
     # Some set-ups
     def __init__(self):
         users_path = './data/profiles.json'
-        # self.users = UserProfileManagement(users_path)
+        # llm_gen_prop_path = './data/LLM_Generated_Properties.json'   # Attempt to read in and use LLM Generated Properties by Joanne
+        # self.properties = load_properties(self, llm_gen_prop_path)   # Attempt to read in and use LLM Generated Properties by Joanne
         self.properties = generate_properties()
 
         # Whether to load previously auto-saved users
@@ -197,6 +210,7 @@ class NestApp:
         self.userProfileManagement.add_user(user)   # this is where method in UserProfileManagement takes place
         print(f"Welcome on board, {name}!\nYour UID is {user.user_id}\nPlease copy your UID and save it somewhere, as this is your unique token!")
 
+
     # Option 3: Editing existing user based on UID.
     def edit_user(self):
         input_id = input("Enter your UID:")
@@ -211,27 +225,27 @@ class NestApp:
                     name = input("Enter new name:")
                     u.update_name(name)
                 elif request == 2:
-                    destination = input("Enter new destination (enter 0 if you don't want to change destination):")
+                    destination = input("Enter new destination (e.g. Quebec City, Vancouver) (enter 0 if you don't want to change destination):").title()
                     if destination != "0":
                         u.update_destination(destination)
 
-                    size = int(input("Enter new group size (enter 0 if you don't want to change size):"))
+                    size = int(input("Enter new group size (1-12) (enter 0 if you don't want to change size):"))
                     if size != 0:
                         u.update_group_size(size)
 
-                    budget = int(input("Enter new travel budget (enter 0 if you don't want to change budget):"))
+                    budget = int(input("Enter new travel budget (50-600) (enter 0 if you don't want to change budget):"))
                     if budget != 0:
                         u.update_budget(budget)
 
-                    print("Enter the characteristics of your new preferred environment, separated by commas without spaces (e.g., quiet,beachfront)."
-                          , "Enter 0 if you don't want to change field.")
+                    print("Enter the new characteristics of your preferred environment (e.g. quiet, beachfront) (comma separated)."
+                          , "Enter 0 if you don't want to change this field.")
                     env = input()
                     env_list = [e.strip() for e in env.split(",") if e.strip()]
                     if env != "0":
                         u.update_environment(env_list)
 
                     print(
-                        "Enter the features that you want to have in your home, separated by commas without spaces (e.g., wifi,microwave oven)."
+                        "Enter the new features you want in your home (e.g. wifi, microwave oven) (comma separated)."
                     , "Enter 0 if you don't want to change field.")
                     features = input()
                     feature_list = [feature.strip() for feature in features.split(",") if feature.strip()]
