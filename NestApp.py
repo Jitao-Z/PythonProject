@@ -197,7 +197,7 @@ class NestApp:
         self.userProfileManagement.add_user(user)   # this is where method in UserProfileManagement takes place
         print(f"Welcome on board, {name}!\nYour UID is {user.user_id}\nPlease copy your UID and save it somewhere, as this is your unique token!")
 
-    # Option 2: Editing existing user based on UID.
+    # Option 3: Editing existing user based on UID.
     def edit_user(self):
         input_id = input("Enter your UID:")
         for u in self.userProfileManagement.users:
@@ -394,9 +394,9 @@ class NestApp:
             self.createUser()
         elif instruction == "2":
             print("View a user")
-            self.edit_user()
         elif instruction == "3":
             print("Edit an existing profile")
+            self.edit_user()
         elif instruction == "4":
             self.matchUser()
         elif instruction == "5":
