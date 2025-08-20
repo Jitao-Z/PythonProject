@@ -3,6 +3,7 @@ import random
 import uuid
 from User import User
 from UserProfileManagement import UserProfileManagement
+from Property import Property
 import pandas as pd
 import requests, getpass
 
@@ -58,14 +59,14 @@ FEATURE_POOL = [
 
 
 # Attempt to read in and use LLM Generated Properties by Joanne
-# def load_properties(self, path):
-#     try:
-#         with open(path, "r") as f:
-#             data = json.load(f)
-#             return [Property.from_dict(u) for u in data]
-#     except FileNotFoundError:
-#         print(f"File {path} not found. Returning empty list.")
-#         return []
+def load_properties(self, path):
+    try:
+        with open(path, "r") as f:
+            data = json.load(f)
+            return [Property.from_dict(u) for u in data]
+    except FileNotFoundError:
+        print(f"File {path} not found. Returning empty list.")
+        return []
 
 
 
@@ -128,9 +129,9 @@ class NestApp:
     # Some set-ups
     def __init__(self):
         users_path = './data/profiles.json'
-        # llm_gen_prop_path = './data/LLM_Generated_Properties.json'   # Attempt to read in and use LLM Generated Properties by Joanne
-        # self.properties = load_properties(self, llm_gen_prop_path)   # Attempt to read in and use LLM Generated Properties by Joanne
-        self.properties = generate_properties()
+        llm_gen_prop_path = './data/LLM_Generated_Properties.json'   # Attempt to read in and use LLM Generated Properties by Joanne
+        self.properties = load_properties(self, llm_gen_prop_path)   # Attempt to read in and use LLM Generated Properties by Joanne
+        #self.properties = generate_properties()
 
         # Whether to load previously auto-saved users
         choice = input("Welcome to Nest! Would you like to load previously saved users? (y/n): ").lower()
@@ -158,7 +159,6 @@ class NestApp:
                 print("Thank you for using Nest! See you soon!")
             else:
                 self.proceedOtherOptions(instruction)
-
 
     # Option 1: Create a new user
     def createUser(self):
@@ -210,6 +210,20 @@ class NestApp:
         self.userProfileManagement.add_user(user)   # this is where method in UserProfileManagement takes place
         print(f"Welcome on board, {name}!\nYour UID is {user.user_id}\nPlease copy your UID and save it somewhere, as this is your unique token!")
 
+    # Option 2: View a specific user based on UID.
+    def view_user(self):
+        input_id = input("Enter UID that you want to view: ")
+        for u in self.userProfileManagement.users:
+            if u.user_id == input_id:
+                print(f"\nName: {u.name}")
+                print(f"Destination: {u.destination}")
+                print(f"Group Size: {u.group_size}")
+                print(f"Budget: ${round(u.budget)}")
+                print(f"Environment: {u.pre_environ}")
+                print(f"Features: {u.features}")
+                print("\n")
+            else:
+                print("\nPlease enter a valid UID!")
 
     # Option 3: Editing existing user based on UID.
     def edit_user(self):
@@ -280,33 +294,40 @@ class NestApp:
                     llm_input = matched_df[llm_cols].to_dict(orient="records")
                     prompt = "suggest 3 fun and relevant activities for each property"
                     result = llm_suggest_activities(self, properties=llm_input, user_prompt=prompt)
-
-                    # extract the raw text
+                    
+                    # read the raw text
                     raw_text = result.get("raw", json.dumps(result))
+
+                    # check if the raw text is json
+                    if not isinstance(raw_text, str):
+                        raw_text = json.dumps(raw_text)
+                    
                     raw_text = raw_text.replace("```json", "").replace("```", "").strip()
 
-                    # parse through the JSON result
-                    activities_list = []
+                    # then try to parse through the JSON
+                    properties_with_activities_list = []
                     try:
                         parsed = json.loads(raw_text)
+                        # if it's a dictionary, then it gets added to a list so that it can be iterated over later
                         if isinstance(parsed, dict):
-                            activities_list = [parsed]
+                            properties_with_activities_list = [parsed]
+                        # if it's already a list of dictionaries, then we go through each object to check that it's a dictionary (i.e. a property)    
                         elif isinstance(parsed, list):
-                            activities_list = [obj for obj in parsed if isinstance(obj, dict)]
+                            properties_with_activities_list = [obj for obj in parsed if isinstance(obj, dict)]
                     except json.JSONDecodeError:
-                        print("Error: could not parse through the activities.")
+                        print("Error: something went wrong with parsing through the JSON.")
 
                     # print activities
                     for row in matched_df.itertuples():
                         prop_id = int(row.property_id)
-                        acts = []
-                        for a in activities_list:
+                        final_activities_list = []
+                        for a in properties_with_activities_list:
                             if isinstance(a, dict) and a.get("property_id") == prop_id:
-                                acts.extend(a.get("suggested_activities", []))
-                        print(f"\nProperty ID {prop_id}, Location: {row.location}")
-                        if acts:
-                            for act in acts:
-                                print(f" - {act}")
+                                final_activities_list.extend(a.get("suggested_activities", []))
+                        print(f"\nProperty ID {prop_id} in {row.location}:")
+                        if final_activities_list:
+                            for activity in final_activities_list:
+                                print(f" - {activity}")
                         else:
                             print(" No activities found!")
                     break
@@ -315,13 +336,10 @@ class NestApp:
                 else:
                     print("Not a valid response.")
 
-
-
-
     # very central to our program
     # scoring/matching logic that I am applying
     def match(self, user):
-        df = pd.DataFrame(self.properties).copy()
+        df = pd.DataFrame([p.to_dict() for p in self.properties]).copy()
 
         # if a property is not located in our user's destination,
         # it will be dropped immediately without being scored/considered
@@ -407,7 +425,7 @@ class NestApp:
         if instruction == "1":
             self.createUser()
         elif instruction == "2":
-            print("View a user")
+            self.view_user()
         elif instruction == "3":
             self.edit_user()
         elif instruction == "4":
