@@ -13,7 +13,7 @@ HEADERS = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/js
 # creating the instructions for LLM
 prompts = {
     "locations": (
-        "Generate a JSON array containing 200 random travel destinations. "
+        "Generate a JSON array containing 200 popular travel destinations, predominantly in the US and Canada. "
         "Only include the name of the city or town, without country or region. "
         "Return ONLY a valid JSON array (list), not an object, not markdown, not extra text. "
         "Example format: [\"Paris\", \"Tokyo\", \"Toronto\", ...]."
@@ -31,43 +31,52 @@ prompts = {
 }
 
 
-
 # function that ask to generate results from LLM
 def generate_from_llm(prompt):
-    data = {
-        "model": MODEL,
-        "messages": [
-            {"role": "system", "content": prompt},
-            {"role": "user", "content": "Generate the list now."}
-        ]
-    }
+    attempt = False
+    while attempt == False:
+        try:
+            data = {
+                "model": MODEL,
+                "messages": [
+                    {"role": "system", "content": prompt},
+                    {"role": "user", "content": "Generate the list now."}
+                ]
+            }
 
-    response = requests.post(OPENROUTER_URL, headers=HEADERS, json=data)
-    result = response.json()
+            response = requests.post(OPENROUTER_URL, headers=HEADERS, json=data)
+            result = response.json()
 
-    # extracting output from LLM
-    content = None
-    if "results" in result:     # accounting for different language (results vs choices) used in different LLM
-        content = result["results"][0].get("content", "")
-    elif "choices" in result:
-        choice = result["choices"][0]       # accounting for different response format by OpenAI
-        if "message" in choice and "content" in choice["message"]:
-            content = choice["message"]["content"]
-        elif "text" in choice:
-            content = choice["text"]
+            # extracting output from LLM
+            content = None
+            if "results" in result:  # accounting for different language (results vs choices) used in different LLM
+                content = result["results"][0].get("content", "")
+            elif "choices" in result:
+                choice = result["choices"][0]  # accounting for different response format by OpenAI
+                if "message" in choice and "content" in choice["message"]:
+                    content = choice["message"]["content"]
+                elif "text" in choice:
+                    content = choice["text"]
+                else:
+                    content = result["choices"][0].get("content", "")
 
-    if not content:
-        raise ValueError("No content returned from the API!")
+            if not content:
+                attempt == False
+                raise ValueError("No content returned from the API!")
+            else:
+                # striping the triple backticks around the JSON from the result text
+                content = content.strip()
+                if content.startswith("```"):
+                    content = "\n".join(content.split("\n")[1:-1])
+                attempt == True
 
-    # striping the triple backticks around the JSON from the result text
-    content = content.strip()
-    if content.startswith("```"):
-        content = "\n".join(content.split("\n")[1:-1])
+                return json.loads(content)
 
-    return json.loads(content)
+        except (ValueError, json.JSONDecodeError) as e:
+            print(f"Encounter {e}. Retry again.")
 
 
-output_file = "testPropertyPool.json"
+output_file = "../testPropertyPool.json"
 all_data = {}
 
 # check if output file existed; if not, write empty JSON object
@@ -92,5 +101,3 @@ with open(output_file, "w") as f:
 
 print(f"Saved all property lists to {output_file}")
 
-
-# my API Key: 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

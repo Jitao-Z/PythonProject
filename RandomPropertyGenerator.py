@@ -1,12 +1,14 @@
 import json, random
 
-with open("testPropertyPool.json", "r") as file:
+# Load the property pool JSON file
+with open("../testPropertyPool.json", "r") as file:
     data = json.load(file)
     locations_pool = data["locations"]
     features_pool = data["features"]
     environ_pool = data["environ"]
 
 
+# to generate random property
 def make_random_property(property_id: int):
     location = random.choice(locations_pool)
     price = random.randint(50, 600)
@@ -18,20 +20,20 @@ def make_random_property(property_id: int):
         "location": location,
         "nightly_price": price,
         "maxPeople": maxPeople,
-        "environ": environ,
         "features": features,
+        "environ": environ,
     }
 
 # Create a reproducible dataset (feel free to change/remove the seed)
 random.seed(8431)
-NUM_PROPERTIES = 500
+NUM_PROPERTIES = 6000
 properties = [make_random_property(i) for i in range(1, NUM_PROPERTIES + 1)]
 
 # Optional: save to JSON for reuse elsewhere
-with open("testProperties.json", "w") as f:
+with open("../testProperties.json", "w") as f:
     json.dump(properties, f, indent=2)
 
 len(properties), properties[0]
 
-with open("testProperties.json", "r") as file:
+with open("../testProperties.json", "r") as file:
     property_list = json.load(file)
