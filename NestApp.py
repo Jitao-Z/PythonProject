@@ -276,6 +276,17 @@ class NestApp:
             else:
                 print("\nPlease enter a valid UID!")
 
+    # Option 5: delete a user's records
+    def deleteUser(self):
+
+        user_id = input("Enter the User ID to delete: ").strip()
+        user = self.userProfileManagement.find_user(user_id)
+        if user:
+            self.userProfileManagement.delete_user(user)
+            print(f"User with ID {user_id} deleted successfully.\n")
+        else:
+            print(f"No user found with ID {user_id}.\n")
+
     # Option 4: match a user with properties
     def matchUser(self):
         user_id = input("Enter your UID: ")
@@ -431,7 +442,7 @@ class NestApp:
         elif instruction == "4":
             self.matchUser()
         elif instruction == "5":
-            print("delete")
+            self.deleteUser()
         else:
             print("Your selection is not valid. Try again!")
 
