@@ -227,27 +227,31 @@ class NestApp:
 
     # Option 3: Editing existing user based on UID.
     def edit_user(self):
-        input_id = input("Enter UID that you want to edit:")
+        input_id = input("Enter UID that you want to edit: ")
         for u in self.userProfileManagement.users:
             if u.user_id == input_id:
-                print("\nSelect the following features to change:")
+                print("\nSelect the following features to change: ")
                 print("\t1 -> Edit name")
                 print("\t2 -> Edit travel preferences")
 
-                request = int(input("Enter choice:"))
+                request = int(input("Enter choice: "))
                 if request == 1:
-                    name = input("Enter new name:")
+                    name = input("Enter new name: ")
                     u.update_name(name)
+                    print(f"\nEdit made to UID: {u.user_id}")
+                    print("=" * 40)
+                    print(f"Updated Name: {u.name}")
+                    print("-" * 40)
                 elif request == 2:
-                    destination = input("Enter new destination (e.g. Quebec City, Vancouver) (enter 0 if you don't want to change destination):").title()
+                    destination = input("Enter new destination (e.g. Quebec City, Vancouver) (enter 0 if you don't want to change destination): ").title()
                     if destination != "0":
                         u.update_destination(destination)
 
-                    size = int(input("Enter new group size (1-12) (enter 0 if you don't want to change size):"))
+                    size = int(input("Enter new group size (1-12) (enter 0 if you don't want to change size): "))
                     if size != 0:
                         u.update_group_size(size)
 
-                    budget = int(input("Enter new travel budget (50-600) (enter 0 if you don't want to change budget):"))
+                    budget = int(input("Enter new travel budget (50-600) (enter 0 if you don't want to change budget): "))
                     if budget != 0:
                         u.update_budget(budget)
 
@@ -265,27 +269,21 @@ class NestApp:
                     feature_list = [feature.strip() for feature in features.split(",") if feature.strip()]
                     if features != "0":
                         u.update_features(feature_list)
+
+                    print(f"\nEdits made to UID: {u.user_id}")
+                    print("="*40)
+                    print(f"Updated Name: {u.name}")
+                    print(f"Updated Destination: {u.destination}")
+                    print(f"Updated Group Size: {u.group_size}")
+                    print(f"Updated Budget: {u.budget}")
+                    print(f"Updated Preferred Environment: {', '.join(u.pre_environ)}")
+                    print(f"Updated Features: {', '.join(u.features)}")
+                    print("-" * 40)
                 else:
                     print("Please enter a valid choice!")
-                print('User profile edited!')
-                print(f'\nUID: {u.user_id}')
-                print('-'*30)
-                print(f'Name: {u.name}')
-                print(f'Group Size: {u.group_size} | Budget: {u.budget}')
-                print(f'Destination: {u.destination} | Environment: {u.pre_environ} | Features: {u.features}')
+                break
             else:
                 print("\nPlease enter a valid UID!")
-
-    # Option 5: delete a user's records
-    def deleteUser(self):
-
-        user_id = input("Enter the User ID to delete: ").strip()
-        user = self.userProfileManagement.find_user(user_id)
-        if user:
-            self.userProfileManagement.delete_user(user)
-            print(f"User with ID {user_id} deleted successfully.\n")
-        else:
-            print(f"No user found with ID {user_id}.\n")
 
     # Option 4: match a user with properties
     def matchUser(self):
@@ -346,6 +344,17 @@ class NestApp:
                     break
                 else:
                     print("Not a valid response.")
+
+    # Option 5: delete a user's records
+    def deleteUser(self):
+
+        user_id = input("Enter the User ID to delete: ").strip()
+        user = self.userProfileManagement.find_user(user_id)
+        if user:
+            self.userProfileManagement.delete_user(user)
+            print(f"User with ID {user_id} deleted successfully.\n")
+        else:
+            print(f"No user found with ID {user_id}.\n")
 
     # very central to our program
     # scoring/matching logic that I am applying
