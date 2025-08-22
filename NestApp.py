@@ -10,51 +10,51 @@ import requests, getpass
 
 # Generate random properties from a fixed pool of words
 # We can consider this as our own dataset
-def generate_properties():
-    random.seed(8431)
-    NUM_PROPERTIES = 500
-    properties = [generate_property(i) for i in range(1, NUM_PROPERTIES + 1)]
-    with open('./data/properties.json', "w") as f:
-        json.dump(properties, f, indent=4)
-    return properties
-
-def generate_property(property_id):
-    location = random.choice(LOCATIONS)
-    maxPeople = random.randint(1, 12)
-    nightly_price = random.randint(50, 600)
-    environ = random.sample(ENVIRON_POOL, k=random.randint(2, 6))
-    features = random.sample(FEATURE_POOL, k=random.randint(2, 6))
-    return {
-        "property_id": property_id,
-        "location": location,
-        "maxPeople": maxPeople,
-        "nightly_price": nightly_price,
-        "environ": environ,
-        "features": features,
-    }
-
-LOCATIONS = [
-    "Toronto", "Vancouver", "Montreal", "Calgary", "Ottawa",
-    "Edmonton", "Quebec City", "Halifax", "Victoria", "Winnipeg",
-    "Kelowna", "Banff", "Whistler", "Niagara Falls", "Blue Mountain",
-    "Charlottetown", "Regina", "Saskatoon", "St. John’s", "London",
-    "Seattle", "New York", "Boston", "Chicago", "San Francisco",
-    "Chicago", "Los Angeles"
-]
-
-ENVIRON_POOL = [
-    "family-friendly", "pets", "luxury", "urban", "nightlife",
-    "business", "mountains", "romantic", "quiet", "nature", "lakefront", "beachfront",
-    "beach access", "public transport access", "airport", "cozy", "restaurants nearby",
-    "elegant"
-]
-
-FEATURE_POOL = [
-    "wifi", "parking", "gym", "hot tub", "fireplace", "bbq",
-    "patio", "garden", "canoe", "kayak", "swimming pool"
-    "air conditioning", "washer", "dryer", "towels", "hair dryer",
-    "spa", "soft bed", "microwave oven"
-]
+# def generate_properties():
+#     random.seed(8431)
+#     NUM_PROPERTIES = 500
+#     properties = [generate_property(i) for i in range(1, NUM_PROPERTIES + 1)]
+#     with open('./data/properties.json', "w") as f:
+#         json.dump(properties, f, indent=4)
+#     return properties
+#
+# def generate_property(property_id):
+#     location = random.choice(LOCATIONS)
+#     maxPeople = random.randint(1, 12)
+#     nightly_price = random.randint(50, 600)
+#     environ = random.sample(ENVIRON_POOL, k=random.randint(2, 6))
+#     features = random.sample(FEATURE_POOL, k=random.randint(2, 6))
+#     return {
+#         "property_id": property_id,
+#         "location": location,
+#         "maxPeople": maxPeople,
+#         "nightly_price": nightly_price,
+#         "environ": environ,
+#         "features": features,
+#     }
+#
+# LOCATIONS = [
+#     "Toronto", "Vancouver", "Montreal", "Calgary", "Ottawa",
+#     "Edmonton", "Quebec City", "Halifax", "Victoria", "Winnipeg",
+#     "Kelowna", "Banff", "Whistler", "Niagara Falls", "Blue Mountain",
+#     "Charlottetown", "Regina", "Saskatoon", "St. John’s", "London",
+#     "Seattle", "New York", "Boston", "Chicago", "San Francisco",
+#     "Chicago", "Los Angeles"
+# ]
+#
+# ENVIRON_POOL = [
+#     "family-friendly", "pets", "luxury", "urban", "nightlife",
+#     "business", "mountains", "romantic", "quiet", "nature", "lakefront", "beachfront",
+#     "beach access", "public transport access", "airport", "cozy", "restaurants nearby",
+#     "elegant"
+# ]
+#
+# FEATURE_POOL = [
+#     "wifi", "parking", "gym", "hot tub", "fireplace", "bbq",
+#     "patio", "garden", "canoe", "kayak", "swimming pool"
+#     "air conditioning", "washer", "dryer", "towels", "hair dryer",
+#     "spa", "soft bed", "microwave oven"
+# ]
 
 
 

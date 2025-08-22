@@ -1,54 +1,15 @@
 [
     {
-        "user_id": "0a983cdf-1b9a-4ed1-96af-38d76ca365ef",
+        "user_id": "a7d19010-f64c-4ad3-8b00-faa509c9df21",
         "name": "Joanne",
-        "destination": "Saskatoon",
-        "group_size": 12,
-        "budget": 500.0,
-        "preferred_environment": [
-            "airport"
-        ],
-        "features": [
-            "washer"
-        ]
-    },
-    {
-        "user_id": "89189722-1ee7-49ad-8346-d94df2aa4d97",
-        "name": "Carrot",
-        "destination": "Krakow",
+        "destination": "Miami",
         "group_size": 3,
         "budget": 600.0,
         "preferred_environment": [
-            "garden view"
+            "air conditioning"
         ],
         "features": [
-            "refrigerator"
-        ]
-    },
-    {
-        "user_id": "c3aa0d3b-ff69-4380-a139-53000aace1da",
-        "name": "Carrot",
-        "destination": "Amsterdam",
-        "group_size": 3,
-        "budget": 500.0,
-        "preferred_environment": [
-            "rural"
-        ],
-        "features": [
-            "heating"
-        ]
-    },
-    {
-        "user_id": "97f0a401-8796-4052-89b2-aa19a98a6db6",
-        "name": "Ethan",
-        "destination": "Detroit",
-        "group_size": 4,
-        "budget": 600.0,
-        "preferred_environment": [
-            "lake"
-        ],
-        "features": [
-            "hot tub"
+            "wifi"
         ]
     }
 ]
