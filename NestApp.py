@@ -134,17 +134,22 @@ class NestApp:
         #self.properties = generate_properties()
 
         # Whether to load previously auto-saved users
-        choice = input("Welcome to Nest! Would you like to load previously saved users? (y/n): ").lower()
-        if choice == "y":
-            self.userProfileManagement = UserProfileManagement(users_path)
-            self.userProfileManagement.users = self.userProfileManagement.load_users()
-            print(f"Loaded {len(self.userProfileManagement.users)} users from {users_path}.")
-        else:
-            self.userProfileManagement = UserProfileManagement(users_path)
-            self.userProfileManagement.users = []
-            with open(users_path, "w") as f:
-                json.dump([], f)
-            print("Starting with a new user management.")
+        # choice = input("Welcome to Nest! Would you like to load previously saved users? (y/n): ").lower()
+        # if choice == "y":
+        #     self.userProfileManagement = UserProfileManagement(users_path)
+        #     self.userProfileManagement.users = self.userProfileManagement.load_users()
+        #     print(f"Loaded {len(self.userProfileManagement.users)} users from {users_path}.")
+        # else:
+        #     self.userProfileManagement = UserProfileManagement(users_path)
+        #     self.userProfileManagement.users = []
+        #     with open(users_path, "w") as f:
+        #         json.dump([], f)
+        #     print("Starting with a new user management.")
+
+        # Go straight on
+        self.userProfileManagement = UserProfileManagement(users_path)
+        self.userProfileManagement.users = self.userProfileManagement.load_users()
+        print(f"Welcome to Nest! Loaded {len(self.userProfileManagement.users)} users from {users_path} successfully.")
 
     # Run the Program
     def run(self):
@@ -180,8 +185,6 @@ class NestApp:
                     print("⚠️ Please input a number in the range 1-12.")
             except ValueError:
                 print("⚠️ Please input an integer.")
-                return
-
 
         while True:
             print("Budget: (50-600)")
@@ -193,17 +196,16 @@ class NestApp:
                 else:
                     print("⚠️ Please input a number in the range 50-600.")
             except ValueError:
-                print("⚠️ Please input a valid number.")
-                return
+                print("⚠️ Please input a number.")
 
         print("Enter the characteristics of your preferred environment (e.g. quiet, beachfront) (comma separated): ")
         environ_input = input()
-        environ_list = [env.strip() for env in environ_input.split(",")]
+        environ_list = [env.strip().lower() for env in environ_input.split(",")]
         print("Your selected environments:", environ_list)
 
         print("Enter the features you want in your home (e.g. wifi, microwave oven) (comma separated): ")
         feature_input = input()
-        feature_list = [fea.strip() for fea in feature_input.split(",")]
+        feature_list = [fea.strip().lower() for fea in feature_input.split(",")]
         print("Your selected features:", feature_list)
 
         user = User(user_id=str(uuid.uuid4()), name=name, destination=destination, group_size=size, budget=budget, pre_environ=environ_list, features=feature_list)
@@ -394,11 +396,11 @@ class NestApp:
                 return 10
             elif price <= user.budget + 20:
                 return 9
-            elif price <= user.budget + 50:
+            elif price <= user.budget + 40:
                 return 8
-            elif price <= user.budget + 70:
+            elif price <= user.budget + 60:
                 return 6
-            elif price <= user.budget + 100:
+            elif price <= user.budget + 80:
                 return 3
             else:
                 return 0
@@ -445,9 +447,6 @@ class NestApp:
 
 
 
-
-
-    # TODO: Not done here!!!! This should be the starting point!!!
     def proceedOtherOptions(self, instruction):
         if instruction == "1":
             self.createUser()

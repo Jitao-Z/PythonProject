@@ -1,15 +1,19 @@
 [
     {
-        "user_id": "a7d19010-f64c-4ad3-8b00-faa509c9df21",
-        "name": "Joanne",
-        "destination": "Miami",
-        "group_size": 3,
-        "budget": 600.0,
+        "user_id": "800e44c9-7592-4e94-becc-d18a476f9699",
+        "name": "Jason",
+        "destination": "Las Vegas",
+        "group_size": 5,
+        "budget": 400.0,
         "preferred_environment": [
-            "air conditioning"
+            "quiet",
+            "beach",
+            "sunshine"
         ],
         "features": [
-            "wifi"
+            "wifi",
+            "microwave oven",
+            "mattress"
         ]
     }
 ]

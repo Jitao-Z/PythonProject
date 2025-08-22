@@ -5,10 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43d3b18-063a-4513-ad6c-d7445b6dc72e" name="Changes" comment="debug editing user">
-      <change beforePath="$PROJECT_DIR$/.idea/PythonProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonProject.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NestApp.py" beforeDir="false" afterPath="$PROJECT_DIR$/NestApp.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/OldREADME.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserProfileManagement.py" beforeDir="false" afterPath="$PROJECT_DIR$/UserProfileManagement.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/profiles.json" beforeDir="false" afterPath="$PROJECT_DIR$/data/profiles.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -32,12 +31,12 @@
     &quot;assignee&quot;: &quot;Jitao-Z&quot;
   }
 }</component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/Jitao-Z/PythonProject.git",
-    "accountId": "295478c5-254f-4286-a9c6-d2d8eb0f06d9"
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Jitao-Z/PythonProject.git&quot;,
+    &quot;accountId&quot;: &quot;295478c5-254f-4286-a9c6-d2d8eb0f06d9&quot;
   }
-}]]></component>
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
 }</component>
@@ -304,7 +303,7 @@
     <option name="LAST_COMMIT_MESSAGE" value="debug editing user" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/final$Main.coverage" NAME="Main Coverage Results" MODIFIED="1755646381378" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/final$Main.coverage" NAME="Main Coverage Results" MODIFIED="1755906003270" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonProject$User.coverage" NAME="User Coverage Results" MODIFIED="1754960897629" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/PythonProject$test.coverage" NAME="test Coverage Results" MODIFIED="1755056471586" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/test" />
     <SUITE FILE_PATH="coverage/PythonProject$NestApp.coverage" NAME="NestApp Coverage Results" MODIFIED="1755558549454" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
