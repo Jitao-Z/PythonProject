@@ -212,18 +212,25 @@ class NestApp:
 
     # Option 2: View a specific user based on UID.
     def view_user(self):
-        input_id = input("Enter UID that you want to view: ")
-        for u in self.userProfileManagement.users:
-            if u.user_id == input_id:
-                print(f"\nName: {u.name}")
-                print(f"Destination: {u.destination}")
-                print(f"Group Size: {u.group_size}")
-                print(f"Budget: ${round(u.budget)}")
-                print(f"Environment: {u.pre_environ}")
-                print(f"Features: {u.features}")
-                print("\n")
-            else:
-                print("\nPlease enter a valid UID!")
+        while True:
+            input_id = input("Enter UID that you want to view (enter 0 if you want to return to the menu): ")
+            if(input_id=="0"):
+                return
+            for u in self.userProfileManagement.users:
+                if u.user_id == input_id:
+                    print(f"\nViewing UID: {u.user_id}")
+                    print("="*40)
+                    print(f"Name: {u.name}")
+                    print(f"Destination: {u.destination}")
+                    print(f"Group Size: {u.group_size}")
+                    print(f"Budget: ${round(u.budget)}")
+                    print(f"Preferred Environment: {', '.join(u.pre_environ)}")
+                    print(f"Features: {', '.join(u.features)}")
+                    print("-" * 40)
+                    print("\n")
+                    return
+            print("\nThis user does not exist. Please enter a valid UID!")
+            print("\n")
 
     # Option 3: Editing existing user based on UID.
     def edit_user(self):
