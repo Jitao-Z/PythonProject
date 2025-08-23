@@ -10,7 +10,7 @@ with open("PropertyPool.json", "r") as file:
 
 # to generate random property
 def make_random_property(property_id: int):
-    location = random.choice(locations_pool).lower()
+    location = random.choice(locations_pool)
     price = random.randint(50, 600)
     maxPeople = random.randint(1, 12)
     features = [f.lower() for f in random.sample(features_pool, k=random.randint(3, 10))]
