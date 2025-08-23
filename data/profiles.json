@@ -36,7 +36,7 @@
     {
         "user_id": "289246d1-25db-420b-97f7-0c2f6d7b74ae",
         "name": "Kylian",
-        "destination": "Bowling Green",
+        "destination": "Highland Park",
         "group_size": 4,
         "budget": 550.0,
         "preferred_environment": [
@@ -64,6 +64,23 @@
             "wifi",
             "kitchen",
             "pool"
+        ]
+    },
+    {
+        "user_id": "add3a8f7-c687-45d1-a220-1f46a6f659d5",
+        "name": "Taylor",
+        "destination": "Portland",
+        "group_size": 2,
+        "budget": 400.0,
+        "preferred_environment": [
+            "quiet",
+            "cozy",
+            "lakeside"
+        ],
+        "features": [
+            "wifi",
+            "kitchen",
+            "2 bedroom"
         ]
     }
 ]

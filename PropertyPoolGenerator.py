@@ -76,7 +76,7 @@ def generate_from_llm(prompt):
             print(f"Encounter {e}. Retry again.")
 
 
-output_file = "PropertyPool.json"
+output_file = "./data/PropertyPool.json"
 all_data = {}
 
 # check if output file existed; if not, write empty JSON object

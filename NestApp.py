@@ -218,11 +218,12 @@ class NestApp:
     def view_user(self):
         while True:
             input_id = input("Enter UID that you want to view (enter 0 if you want to return to the menu): ")
-            if(input_id == "0"):
+            if(input_id == "0"):    # in this case, end the while loop to send user back to menu
                 return
+            print("\n")
             user = self.userProfileManagement.find_user(input_id)
             
-            if user:
+            if user:    # if the user is found, then print relevant information about the user
                 print("="*40)
                 print(f"Name: {user.name}")
                 print(f"Destination: {user.destination}")
@@ -234,7 +235,7 @@ class NestApp:
                 print("\n")
                 return
 
-            print("\nThis user does not exist. Please enter a valid UID!")
+            print("\nThis user does not exist. Please enter a valid UID!")  # if the UID does not have a match, the user is prompted to input their UID again
             print("\n")
 
     # Option 3: Editing existing user based on UID.
@@ -325,7 +326,7 @@ class NestApp:
             print("Come back when you recall your UID!")
         else:
             matched_df = self.match(user_found)   # return a df in order to do LLM
-            if matched_df is None:
+            if matched_df is None:  # if there are no matched properties, then this function ends and the user is not asked if they want suggested activities
                 return
 
             # LLM starts
@@ -336,7 +337,10 @@ class NestApp:
                     llm_input = matched_df[llm_cols].to_dict(orient="records")  # turn the dataframe into a list of dictionaries
                     prompt = "For each property, suggest 3 fun and relevant activities. Respond only with valid JSON as a list of objects. Each object must have property_id and suggested_activities."
 
-                    # trying with time
+                    time.sleep(3)
+                    print("Generating suggested activities...")
+
+                    # trying with the time library 3 times to call the LLM and generate activities
                     parsed = None
                     for attempt in range(3):
                         result = llm_suggest_activities(self, properties=llm_input, user_prompt=prompt)
@@ -367,7 +371,7 @@ class NestApp:
                         print("❌ Could not fetch valid suggested activities after 3 tries.")
                         return
 
-                    # making it a list of dicts
+                    # if parsing is successful, then make it a list of dicts
                     if isinstance(parsed, dict):
                         properties_with_activities_list = [parsed]
                     elif isinstance(parsed, list):
@@ -375,7 +379,7 @@ class NestApp:
                     else:
                         properties_with_activities_list = []
 
-                    # then displaying the result
+                    # then display the result
                     for row in matched_df.itertuples():
                         prop_id = str(row.property_id)  # force string for consistency
                         final_activities_list = []

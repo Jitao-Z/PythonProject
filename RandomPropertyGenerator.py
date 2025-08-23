@@ -1,7 +1,7 @@
 import json, random
 
 # Load the property pool JSON file
-with open("PropertyPool.json", "r") as file:
+with open("./data/PropertyPool.json", "r") as file:
     data = json.load(file)
     locations_pool = data["locations"]
     features_pool = data["features"]
@@ -31,10 +31,10 @@ NUM_PROPERTIES = 6000
 properties = [make_random_property(i) for i in range(1, NUM_PROPERTIES + 1)]
 
 # Save to JSON for reuse elsewhere
-with open("LLM_Generated_Properties.json", "w") as f:
+with open("./data/LLM_Generated_Properties.json", "w") as f:
     json.dump(properties, f, indent=2)
 
 len(properties), properties[0]
 
-with open("LLM_Generated_Properties.json", "r") as file:
+with open("./data/LLM_Generated_Properties.json", "r") as file:
     property_list = json.load(file)
