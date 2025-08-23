@@ -56,59 +56,47 @@ class UserProfileManagement:
             print(f"Features: {', '.join(u.features)}")
             print("-" * 40)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
     # Ignore the following:
     # def get_users(self):
     #     return self.users
 
-    # def edit_user_name(self, user:User, new_name):
-    #     for u in self.users:
-    #         if u is user:
-    #             u.update_name(new_name)
-    #             self.save_users()
+    def edit_user_name(self, user:User, new_name):
+         for u in self.users:
+             if u is user:
+                 u.update_name(new_name)
+                 self.save_users()
     #
-    # def edit_user_destination(self, user:User, new_destination):
-    #     for u in self.users:
-    #         if u is user:
-    #             u.update_destination(new_destination)
-    #             self.save_users()
+    def edit_user_destination(self, user:User, new_destination):
+         for u in self.users:
+             if u is user:
+                 u.update_destination(new_destination)
+                 self.save_users()
     #
     # # REQUIRES: group size should be >= 1 and be integer
-    # def edit_user_group_size(self, user:User, new_group_size):
-    #     for u in self.users:
-    #         if u is user:
-    #             u.update_group_size(new_group_size)
-    #             self.save_users()
+    def edit_user_group_size(self, user:User, new_group_size):
+         for u in self.users:
+             if u is user:
+                 u.update_group_size(new_group_size)
+                 self.save_users()
     #
     # # REQUIRES: budget should be a positive integer
-    # def edit_user_budget(self, user: User, budget):
-    #     for u in self.users:
-    #         if u is user:
-    #             u.update_budget(budget)
-    #             self.save_users()
+    def edit_user_budget(self, user: User, budget):
+         for u in self.users:
+             if u is user:
+                 u.update_budget(budget)
+                 self.save_users()
     #
-    # def edit_user_pref_environ(self, user:User, pref_env):
-    #     for u in self.users:
-    #         if u is user:
-    #             u.update_environment(pref_env)
-    #             self.save_users()
+    def edit_user_pref_environ(self, user:User, pref_env):
+         for u in self.users:
+             if u is user:
+                 u.update_environment(pref_env)
+                 self.save_users()
     #
-    # def edit_user_features(self, user:User, features):
-    #     for u in self.users:
-    #         if u is user:
-    #             u.update_features(features)
+    def edit_user_features(self, user:User, features):
+         for u in self.users:
+             if u is user:
+                 u.update_features(features)
+                 self.save_users()
 
 
 

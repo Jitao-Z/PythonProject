@@ -1,19 +1,19 @@
 [
     {
         "user_id": "800e44c9-7592-4e94-becc-d18a476f9699",
-        "name": "Jason",
-        "destination": "Las Vegas",
-        "group_size": 5,
-        "budget": 400.0,
+        "name": "Pedri",
+        "destination": "Barcelona",
+        "group_size": 1,
+        "budget": 50.0,
         "preferred_environment": [
             "quiet",
-            "beach",
-            "sunshine"
+            "sunny",
+            "beach facing"
         ],
         "features": [
-            "wifi",
-            "microwave oven",
-            "mattress"
+            "pool",
+            "football field",
+            "1 bedroom"
         ]
     }
 ]

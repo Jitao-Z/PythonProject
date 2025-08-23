@@ -237,47 +237,67 @@ class NestApp:
     # Option 3: Editing existing user based on UID.
     def edit_user(self):
         input_id = input("Enter UID that you want to edit: ")
-        for u in self.userProfileManagement.users:
-            if u.user_id == input_id:
+        u = self.userProfileManagement.find_user(input_id)
+        if u:
+            while True:
                 print("\nSelect the following features to change: ")
                 print("\t1 -> Edit name")
                 print("\t2 -> Edit travel preferences")
 
-                request = int(input("Enter choice: "))
-                if request == 1:
+                request = input("Enter choice: ")
+                if request == "1":
                     name = input("Enter new name: ")
-                    u.update_name(name)
+                    self.userProfileManagement.edit_user_name(u,name)
                     print(f"\nEdit made to UID: {u.user_id}")
                     print("=" * 40)
                     print(f"Updated Name: {u.name}")
                     print("-" * 40)
-                elif request == 2:
+                    break
+
+                elif request == "2":
                     destination = input("Enter new destination (e.g. Quebec City, Vancouver) (enter 0 if you don't want to change destination): ").title()
                     if destination != "0":
-                        u.update_destination(destination)
+                        self.userProfileManagement.edit_user_destination(u,destination)
 
-                    size = int(input("Enter new group size (1-12) (enter 0 if you don't want to change size): "))
-                    if size != 0:
-                        u.update_group_size(size)
+                    while True:
+                        size = input("Enter new group size (1-12) (enter 0 if you don't want to change size): ")
+                        if size == "0":
+                            break
+                        elif size.isdigit():
+                            size = int(size)
+                            self.userProfileManagement.edit_user_group_size(u,size)
+                            break
+                        else:
+                            print("Please enter a valid choice!")
 
-                    budget = int(input("Enter new travel budget (50-600) (enter 0 if you don't want to change budget): "))
-                    if budget != 0:
-                        u.update_budget(budget)
+                    while True:
+                        budget = input("Enter new travel budget (50-600) (enter 0 if you don't want to change budget): ")
+                        if budget == "0":
+                            break
+                        elif budget.isdigit():
+                            budget = float(budget)
+                            if budget >= 50:
+                                self.userProfileManagement.edit_user_budget(u,budget)
+                                break
+                            else:
+                                print("Budget must be greater than or equal to 50.")
+                        else:
+                            print("Please enter a valid choice!")
+
 
                     print("Enter the new characteristics of your preferred environment (e.g. quiet, beachfront) (comma separated)."
-                          , "Enter 0 if you don't want to change this field.")
-                    env = input()
+                        , "Enter 0 if you don't want to change this field.")
+                    env = input().lower()
                     env_list = [e.strip() for e in env.split(",") if e.strip()]
                     if env != "0":
-                        u.update_environment(env_list)
+                        self.userProfileManagement.edit_user_pref_environ(u,env_list)
 
-                    print(
-                        "Enter the new features you want in your home (e.g. wifi, microwave oven) (comma separated)."
-                    , "Enter 0 if you don't want to change field.")
-                    features = input()
+                    print("Enter the new features you want in your home (e.g. wifi, microwave oven) (comma separated)."
+                        , "Enter 0 if you don't want to change field.")
+                    features = input().lower()
                     feature_list = [feature.strip() for feature in features.split(",") if feature.strip()]
                     if features != "0":
-                        u.update_features(feature_list)
+                        self.userProfileManagement.edit_user_features(u,feature_list)
 
                     print(f"\nEdits made to UID: {u.user_id}")
                     print("="*40)
@@ -288,11 +308,11 @@ class NestApp:
                     print(f"Updated Preferred Environment: {', '.join(u.pre_environ)}")
                     print(f"Updated Features: {', '.join(u.features)}")
                     print("-" * 40)
+                    break
                 else:
                     print("Please enter a valid choice!")
-                break
-            else:
-                print("\nPlease enter a valid UID!")
+        else:
+            print("\nPlease enter a valid UID!")
 
     # Option 4: match a user with properties
     def matchUser(self):
