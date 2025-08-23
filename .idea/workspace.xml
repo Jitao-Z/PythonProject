@@ -5,8 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e43d3b18-063a-4513-ad6c-d7445b6dc72e" name="Changes" comment="debug editing user">
-      <change beforePath="$PROJECT_DIR$/.idea/PythonProject.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/PythonProject.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NestApp.py" beforeDir="false" afterPath="$PROJECT_DIR$/NestApp.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserProfileManagement.py" beforeDir="false" afterPath="$PROJECT_DIR$/UserProfileManagement.py" afterDir="false" />
@@ -277,7 +275,15 @@
       <option name="project" value="LOCAL" />
       <updated>1755646796850</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="debug editing user">
+      <option name="closed" value="true" />
+      <created>1755916437708</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1755916437708</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

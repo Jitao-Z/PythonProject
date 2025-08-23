@@ -40,7 +40,7 @@ class UserProfileManagement:
     def find_user(self, user_id):
         for u in self.users:
             if u.user_id == user_id:
-                print(f"Found user with id {u.user_id}")
+                print(f"Found user with ID {u.user_id}")
                 return u
         # print("User not found.")
         return None

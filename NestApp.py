@@ -269,10 +269,13 @@ class NestApp:
                             break
                         elif size.isdigit():
                             size = int(size)
-                            self.userProfileManagement.edit_user_group_size(u,size)
-                            break
+                            if 1 <= size <= 12:
+                                self.userProfileManagement.edit_user_group_size(u,size)
+                                break
+                            else:
+                                print("⚠️ Please input a number in the range 1-12.")
                         else:
-                            print("Please enter a valid choice!")
+                            print("⚠️ Please enter a valid input.")
 
                     while True:
                         budget = input("Enter new travel budget (50-600) (enter 0 if you don't want to change budget): ")
@@ -280,13 +283,13 @@ class NestApp:
                             break
                         elif budget.isdigit():
                             budget = float(budget)
-                            if budget >= 50:
+                            if 50<= budget <= 600:
                                 self.userProfileManagement.edit_user_budget(u,budget)
                                 break
                             else:
-                                print("Budget must be greater than or equal to 50.")
+                                print("⚠️ Please input a number in the range 50-600.")
                         else:
-                            print("Please enter a valid choice!")
+                            print("⚠️ Please enter a valid input.")
 
 
                     print("Enter the new characteristics of your preferred environment (e.g. quiet, beachfront) (comma separated)."

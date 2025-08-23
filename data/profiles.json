@@ -2,18 +2,17 @@
     {
         "user_id": "800e44c9-7592-4e94-becc-d18a476f9699",
         "name": "Pedri",
-        "destination": "Barcelona",
-        "group_size": 1,
-        "budget": 50.0,
+        "destination": "Denver",
+        "group_size": 12,
+        "budget": 490.0,
         "preferred_environment": [
-            "quiet",
-            "sunny",
-            "beach facing"
+            "snowy",
+            "close to skii resort"
         ],
         "features": [
-            "pool",
-            "football field",
-            "1 bedroom"
+            "wifi",
+            "1 bedroom",
+            "hot tub"
         ]
     },
     {
