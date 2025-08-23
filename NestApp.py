@@ -1,6 +1,8 @@
 import json
-import random
+#import random
 import uuid
+import re
+import time
 from User import User
 from UserProfileManagement import UserProfileManagement
 from Property import Property
@@ -216,21 +218,22 @@ class NestApp:
     def view_user(self):
         while True:
             input_id = input("Enter UID that you want to view (enter 0 if you want to return to the menu): ")
-            if(input_id=="0"):
+            if(input_id == "0"):
                 return
-            for u in self.userProfileManagement.users:
-                if u.user_id == input_id:
-                    print(f"\nViewing UID: {u.user_id}")
-                    print("="*40)
-                    print(f"Name: {u.name}")
-                    print(f"Destination: {u.destination}")
-                    print(f"Group Size: {u.group_size}")
-                    print(f"Budget: ${round(u.budget)}")
-                    print(f"Preferred Environment: {', '.join(u.pre_environ)}")
-                    print(f"Features: {', '.join(u.features)}")
-                    print("-" * 40)
-                    print("\n")
-                    return
+            user = self.userProfileManagement.find_user(input_id)
+            
+            if user:
+                print("="*40)
+                print(f"Name: {user.name}")
+                print(f"Destination: {user.destination}")
+                print(f"Group Size: {user.group_size}")
+                print(f"Budget: ${round(user.budget)}")
+                print(f"Preferred Environment: {', '.join(user.pre_environ)}")
+                print(f"Features: {', '.join(user.features)}")
+                print("-" * 40)
+                print("\n")
+                return
+
             print("\nThis user does not exist. Please enter a valid UID!")
             print("\n")
 
@@ -322,45 +325,62 @@ class NestApp:
             print("Come back when you recall your UID!")
         else:
             matched_df = self.match(user_found)   # return a df in order to do LLM
+            if matched_df is None:
+                return
 
             # LLM starts
             while True:
                 answer = input("Would you like to see suggested activities for your top properties? (y/n) ")
                 if answer == "y":
-                    # shorten the columns used for faster results
-                    llm_cols = ["property_id", "location", "environ", "features"]
-                    llm_input = matched_df[llm_cols].to_dict(orient="records")
-                    prompt = "suggest 3 fun and relevant activities for each property"
-                    result = llm_suggest_activities(self, properties=llm_input, user_prompt=prompt)
-                    
-                    # read the raw text
-                    raw_text = result.get("raw", json.dumps(result))
+                    llm_cols = ["property_id", "location", "environ", "features"]   # shorten the columns used for faster results
+                    llm_input = matched_df[llm_cols].to_dict(orient="records")  # turn the dataframe into a list of dictionaries
+                    prompt = "For each property, suggest 3 fun and relevant activities. Respond only with valid JSON as a list of objects. Each object must have property_id and suggested_activities."
 
-                    # check if the raw text is json
-                    if not isinstance(raw_text, str):
-                        raw_text = json.dumps(raw_text)
-                    
-                    raw_text = raw_text.replace("```json", "").replace("```", "").strip()
+                    # trying with time
+                    parsed = None
+                    for attempt in range(3):
+                        result = llm_suggest_activities(self, properties=llm_input, user_prompt=prompt)
+                        raw_text = result.get("raw", json.dumps(result)).strip()
+                        raw_text = str(raw_text).replace("json", "").strip()
 
-                    # then try to parse through the JSON
-                    properties_with_activities_list = []
-                    try:
-                        parsed = json.loads(raw_text)
-                        # if it's a dictionary, then it gets added to a list so that it can be iterated over later
-                        if isinstance(parsed, dict):
-                            properties_with_activities_list = [parsed]
-                        # if it's already a list of dictionaries, then we go through each object to check that it's a dictionary (i.e. a property)    
-                        elif isinstance(parsed, list):
-                            properties_with_activities_list = [obj for obj in parsed if isinstance(obj, dict)]
-                    except json.JSONDecodeError:
-                        print("Error: something went wrong with parsing through the JSON.")
+                        # using regex to remove code fences that will cause problems with parsing later
+                        raw_text = re.sub(r"^```(?:json)?", "", raw_text, flags=re.IGNORECASE).strip()
+                        raw_text = re.sub(r"```$", "", raw_text).strip()
 
-                    # print activities
+                        try:
+                            parsed = json.loads(raw_text)
+                        except json.JSONDecodeError:    # if parsing is not possible, then the first instance of JSON is attempted to be found
+                            match = re.search(r"\{.*\}|\[.*\]", raw_text, re.DOTALL)
+                            if match:
+                                try:
+                                    parsed = json.loads(match.group(0))
+                                except:
+                                    parsed = None
+
+                        if parsed:
+                            break
+                        else:
+                            print(f"⚠️ JSON parse failed (attempt {attempt+1}/3). Retrying...")
+                            time.sleep(1)
+
+                    if not parsed:
+                        print("❌ Could not fetch valid suggested activities after 3 tries.")
+                        return
+
+                    # making it a list of dicts
+                    if isinstance(parsed, dict):
+                        properties_with_activities_list = [parsed]
+                    elif isinstance(parsed, list):
+                        properties_with_activities_list = [obj for obj in parsed if isinstance(obj, dict)]
+                    else:
+                        properties_with_activities_list = []
+
+                    # then displaying the result
                     for row in matched_df.itertuples():
-                        prop_id = int(row.property_id)
+                        prop_id = str(row.property_id)  # force string for consistency
                         final_activities_list = []
                         for a in properties_with_activities_list:
-                            if isinstance(a, dict) and a.get("property_id") == prop_id:
+                            if str(a.get("property_id")) == prop_id:
                                 final_activities_list.extend(a.get("suggested_activities", []))
                         print(f"\nProperty ID {prop_id} in {row.location}:")
                         if final_activities_list:

@@ -15,5 +15,55 @@
             "football field",
             "1 bedroom"
         ]
+    },
+    {
+        "user_id": "41f7ee9b-35f6-43ab-b6ec-0f2d4e1b42d8",
+        "name": "Mikayla",
+        "destination": "Chicago",
+        "group_size": 3,
+        "budget": 400.0,
+        "preferred_environment": [
+            "quiet",
+            "beach",
+            "pet friendly"
+        ],
+        "features": [
+            "wifi",
+            "washer",
+            "dryer"
+        ]
+    },
+    {
+        "user_id": "289246d1-25db-420b-97f7-0c2f6d7b74ae",
+        "name": "Kylian",
+        "destination": "Bowling Green",
+        "group_size": 4,
+        "budget": 550.0,
+        "preferred_environment": [
+            "quiet",
+            "waterfront"
+        ],
+        "features": [
+            "wifi",
+            "hot tub",
+            "yard"
+        ]
+    },
+    {
+        "user_id": "4fa9e33b-9c8b-49bd-bfd9-82fe8d65fe98",
+        "name": "Luka",
+        "destination": "Miami",
+        "group_size": 3,
+        "budget": 440.0,
+        "preferred_environment": [
+            "beach",
+            "pet friendly",
+            "family friendly"
+        ],
+        "features": [
+            "wifi",
+            "kitchen",
+            "pool"
+        ]
     }
 ]
