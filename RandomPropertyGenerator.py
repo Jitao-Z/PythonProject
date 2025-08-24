@@ -8,7 +8,7 @@ with open("./data/PropertyPool.json", "r") as file:
     environ_pool = data["environ"]
 
 
-# to generate random property
+# function to generate random property
 def make_random_property(property_id: int):
     location = random.choice(locations_pool)
     price = random.randint(50, 600)

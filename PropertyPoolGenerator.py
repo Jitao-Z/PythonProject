@@ -33,6 +33,8 @@ prompts = {
 
 # function that ask to generate results from LLM
 def generate_from_llm(prompt):
+    # setting the while loop to overcome the occational formatting issues from LLM
+    # avoiding ValueError and JSONDecoderError
     attempt = False
     while attempt == False:
         try:
@@ -87,6 +89,7 @@ else:
     with open(output_file, "w") as f:
         f.write("{}")
 
+# Generating property pool using LLM
 for key, prompt in prompts.items():
     print(f"Generating {key}...")
     new_list = generate_from_llm(prompt)
@@ -100,4 +103,3 @@ with open(output_file, "w") as f:
     json.dump(all_data, f, indent=2)
 
 print(f"Saved all property lists to {output_file}")
-

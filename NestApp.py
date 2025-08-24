@@ -1,5 +1,5 @@
 import json
-#import random
+# import random
 import uuid
 import re
 import time
@@ -10,57 +10,8 @@ import pandas as pd
 import requests, getpass
 
 
-# Generate random properties from a fixed pool of words
-# We can consider this as our own dataset
-# def generate_properties():
-#     random.seed(8431)
-#     NUM_PROPERTIES = 500
-#     properties = [generate_property(i) for i in range(1, NUM_PROPERTIES + 1)]
-#     with open('./data/properties.json', "w") as f:
-#         json.dump(properties, f, indent=4)
-#     return properties
-#
-# def generate_property(property_id):
-#     location = random.choice(LOCATIONS)
-#     maxPeople = random.randint(1, 12)
-#     nightly_price = random.randint(50, 600)
-#     environ = random.sample(ENVIRON_POOL, k=random.randint(2, 6))
-#     features = random.sample(FEATURE_POOL, k=random.randint(2, 6))
-#     return {
-#         "property_id": property_id,
-#         "location": location,
-#         "maxPeople": maxPeople,
-#         "nightly_price": nightly_price,
-#         "environ": environ,
-#         "features": features,
-#     }
-#
-# LOCATIONS = [
-#     "Toronto", "Vancouver", "Montreal", "Calgary", "Ottawa",
-#     "Edmonton", "Quebec City", "Halifax", "Victoria", "Winnipeg",
-#     "Kelowna", "Banff", "Whistler", "Niagara Falls", "Blue Mountain",
-#     "Charlottetown", "Regina", "Saskatoon", "St. John’s", "London",
-#     "Seattle", "New York", "Boston", "Chicago", "San Francisco",
-#     "Chicago", "Los Angeles"
-# ]
-#
-# ENVIRON_POOL = [
-#     "family-friendly", "pets", "luxury", "urban", "nightlife",
-#     "business", "mountains", "romantic", "quiet", "nature", "lakefront", "beachfront",
-#     "beach access", "public transport access", "airport", "cozy", "restaurants nearby",
-#     "elegant"
-# ]
-#
-# FEATURE_POOL = [
-#     "wifi", "parking", "gym", "hot tub", "fireplace", "bbq",
-#     "patio", "garden", "canoe", "kayak", "swimming pool"
-#     "air conditioning", "washer", "dryer", "towels", "hair dryer",
-#     "spa", "soft bed", "microwave oven"
-# ]
-
-
-
-# Attempt to read in and use LLM Generated Properties by Joanne
+# to load the properties that was randomly generated
+# return properties in a list
 def load_properties(self, path):
     try:
         with open(path, "r") as f:
@@ -71,7 +22,6 @@ def load_properties(self, path):
         return []
 
 
-
 # LLM Preparations
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 MODEL = "deepseek/deepseek-chat-v3-0324:free"
@@ -80,12 +30,15 @@ MODEL = "deepseek/deepseek-chat-v3-0324:free"
 API_KEY = getpass.getpass("Enter your OpenRouter API key (input is hidden): ").strip()
 HEADERS = {"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"}
 
+# storing instructions/prompts for LLM
 SYSTEM_PROMPT = (
     "You are a helpful assistant for an Airbnb-like vacation property search. "
     "Given a list of PROPERTIES (JSON), suggest 3 fun and relevant activities for each property based on its location, environs and features and return JSON with keys with this format: "
     "{'property_ids': int, 'suggested_activities: list[str]'}. Return ONLY valid JSON."
-)   # change prompt a bit: specifically:, environs
+)
 
+
+# function that integrate LLM to generate suggested activities based on user's matched properties
 def llm_suggest_activities(self, properties, user_prompt, model=MODEL, temperature=0.7):
     payload = {
         "model": model,
@@ -121,19 +74,18 @@ def llm_suggest_activities(self, properties, user_prompt, model=MODEL, temperatu
         return {"error": "Non-JSON content", "raw": content}
 
 
-
 ############################################################ Everything above is preparation: generate properties, LLM setup #################################################################
-
 
 
 # This is where our program officially starts
 class NestApp:
-    # Some set-ups
+    # Some set-ups, including specifying the path for properties and user files
     def __init__(self):
         users_path = './data/profiles.json'
-        llm_gen_prop_path = './data/LLM_Generated_Properties.json'   # Attempt to read in and use LLM Generated Properties by Joanne
-        self.properties = load_properties(self, llm_gen_prop_path)   # Attempt to read in and use LLM Generated Properties by Joanne
-        #self.properties = generate_properties()
+        llm_gen_prop_path = './data/LLM_Generated_Properties.json'  # to read and use LLM Generated Properties
+        self.properties = load_properties(self,
+                                          llm_gen_prop_path)
+        # self.properties = generate_properties()
 
         # Whether to load previously auto-saved users
         # choice = input("Welcome to Nest! Would you like to load previously saved users? (y/n): ").lower()
@@ -148,12 +100,12 @@ class NestApp:
         #         json.dump([], f)
         #     print("Starting with a new user management.")
 
-        # Go straight on
+        # to begin the program
         self.userProfileManagement = UserProfileManagement(users_path)
         self.userProfileManagement.users = self.userProfileManagement.load_users()
         print(f"Welcome to Nest! Loaded {len(self.userProfileManagement.users)} users from {users_path} successfully.")
 
-    # Run the Program
+    # Run the Program and prompt the user to select an option to proceed
     def run(self):
         keepGoing: bool = True
 
@@ -168,6 +120,8 @@ class NestApp:
                 self.proceedOtherOptions(instruction)
 
     # Option 1: Create a new user
+    # return a dictionary related to user information
+    # store the information in a json file
     def createUser(self):
         print("User Name: ")
         name = input()
@@ -210,21 +164,23 @@ class NestApp:
         feature_list = [fea.strip().lower() for fea in feature_input.split(",")]
         print("Your selected features:", feature_list)
 
-        user = User(user_id=str(uuid.uuid4()), name=name, destination=destination, group_size=size, budget=budget, pre_environ=environ_list, features=feature_list)
-        self.userProfileManagement.add_user(user)   # this is where method in UserProfileManagement takes place
-        print(f"Welcome on board, {name}!\nYour UID is {user.user_id}\nPlease copy your UID and save it somewhere, as this is your unique token!")
+        user = User(user_id=str(uuid.uuid4()), name=name, destination=destination, group_size=size, budget=budget,
+                    pre_environ=environ_list, features=feature_list)
+        self.userProfileManagement.add_user(user)  # this is where method in UserProfileManagement takes place
+        print(
+            f"Welcome on board, {name}!\nYour UID is {user.user_id}\nPlease copy your UID and save it somewhere, as this is your unique token!")
 
-    # Option 2: View a specific user based on UID.
+    # Option 2: View a specific user based on UID
     def view_user(self):
         while True:
             input_id = input("Enter UID that you want to view (enter 0 if you want to return to the menu): ")
-            if(input_id == "0"):    # in this case, end the while loop to send user back to menu
+            if (input_id == "0"):  # in this case, end the while loop to send user back to menu
                 return
             print("\n")
             user = self.userProfileManagement.find_user(input_id)
-            
-            if user:    # if the user is found, then print relevant information about the user
-                print("="*40)
+
+            if user:  # if the user is found, then print relevant information about the user
+                print("=" * 40)
                 print(f"Name: {user.name}")
                 print(f"Destination: {user.destination}")
                 print(f"Group Size: {user.group_size}")
@@ -235,10 +191,13 @@ class NestApp:
                 print("\n")
                 return
 
-            print("\nThis user does not exist. Please enter a valid UID!")  # if the UID does not have a match, the user is prompted to input their UID again
+            print(
+                "\nThis user does not exist. Please enter a valid UID!")  # if the UID does not have a match, the user is prompted to input their UID again
             print("\n")
 
-    # Option 3: Editing existing user based on UID.
+    # Option 3: Editing existing user based on UID
+    # return a dictionary related to user information
+    # update the information in a json file
     def edit_user(self):
         input_id = input("Enter UID that you want to edit: ")
         u = self.userProfileManagement.find_user(input_id)
@@ -251,7 +210,7 @@ class NestApp:
                 request = input("Enter choice: ")
                 if request == "1":
                     name = input("Enter new name: ")
-                    self.userProfileManagement.edit_user_name(u,name)
+                    self.userProfileManagement.edit_user_name(u, name)
                     print(f"\nEdit made to UID: {u.user_id}")
                     print("=" * 40)
                     print(f"Updated Name: {u.name}")
@@ -259,9 +218,10 @@ class NestApp:
                     break
 
                 elif request == "2":
-                    destination = input("Enter new destination (e.g. Quebec City, Vancouver) (enter 0 if you don't want to change destination): ").title()
+                    destination = input(
+                        "Enter new destination (e.g. Quebec City, Vancouver) (enter 0 if you don't want to change destination): ").title()
                     if destination != "0":
-                        self.userProfileManagement.edit_user_destination(u,destination)
+                        self.userProfileManagement.edit_user_destination(u, destination)
 
                     while True:
                         size = input("Enter new group size (1-12) (enter 0 if you don't want to change size): ")
@@ -270,7 +230,7 @@ class NestApp:
                         elif size.isdigit():
                             size = int(size)
                             if 1 <= size <= 12:
-                                self.userProfileManagement.edit_user_group_size(u,size)
+                                self.userProfileManagement.edit_user_group_size(u, size)
                                 break
                             else:
                                 print("⚠️ Please input a number in the range 1-12.")
@@ -278,36 +238,37 @@ class NestApp:
                             print("⚠️ Please enter a valid input.")
 
                     while True:
-                        budget = input("Enter new travel budget (50-600) (enter 0 if you don't want to change budget): ")
+                        budget = input(
+                            "Enter new travel budget (50-600) (enter 0 if you don't want to change budget): ")
                         if budget == "0":
                             break
                         elif budget.isdigit():
                             budget = float(budget)
-                            if 50<= budget <= 600:
-                                self.userProfileManagement.edit_user_budget(u,budget)
+                            if 50 <= budget <= 600:
+                                self.userProfileManagement.edit_user_budget(u, budget)
                                 break
                             else:
                                 print("⚠️ Please input a number in the range 50-600.")
                         else:
                             print("⚠️ Please enter a valid input.")
 
-
-                    print("Enter the new characteristics of your preferred environment (e.g. quiet, beachfront) (comma separated)."
+                    print(
+                        "Enter the new characteristics of your preferred environment (e.g. quiet, beachfront) (comma separated)."
                         , "Enter 0 if you don't want to change this field.")
                     env = input().lower()
                     env_list = [e.strip() for e in env.split(",") if e.strip()]
                     if env != "0":
-                        self.userProfileManagement.edit_user_pref_environ(u,env_list)
+                        self.userProfileManagement.edit_user_pref_environ(u, env_list)
 
                     print("Enter the new features you want in your home (e.g. wifi, microwave oven) (comma separated)."
-                        , "Enter 0 if you don't want to change field.")
+                          , "Enter 0 if you don't want to change field.")
                     features = input().lower()
                     feature_list = [feature.strip() for feature in features.split(",") if feature.strip()]
                     if features != "0":
-                        self.userProfileManagement.edit_user_features(u,feature_list)
+                        self.userProfileManagement.edit_user_features(u, feature_list)
 
                     print(f"\nEdits made to UID: {u.user_id}")
-                    print("="*40)
+                    print("=" * 40)
                     print(f"Updated Name: {u.name}")
                     print(f"Updated Destination: {u.destination}")
                     print(f"Updated Group Size: {u.group_size}")
@@ -322,13 +283,15 @@ class NestApp:
             print("\nPlease enter a valid UID!")
 
     # Option 4: match a user with properties
+    # and (optionally) generate suggested activities for each top property using the LLM
     def matchUser(self):
         user_id = input("Enter your UID: ")
-        user_found = self.userProfileManagement.find_user(user_id)   # we can use find_user method in userProfileManagement to locate a user very easily
+        user_found = self.userProfileManagement.find_user(
+            user_id)  # we can use find_user method in userProfileManagement to locate a user very easily
         if user_found is None:
             print("Come back when you recall your UID!")
         else:
-            matched_df = self.match(user_found)   # return a df in order to do LLM
+            matched_df = self.match(user_found)  # return a df in order to do LLM
             if matched_df is None:  # if there are no matched properties, then this function ends and the user is not asked if they want suggested activities
                 return
 
@@ -336,8 +299,10 @@ class NestApp:
             while True:
                 answer = input("Would you like to see suggested activities for your top properties? (y/n) ")
                 if answer == "y":
-                    llm_cols = ["property_id", "location", "environ", "features"]   # shorten the columns used for faster results
-                    llm_input = matched_df[llm_cols].to_dict(orient="records")  # turn the dataframe into a list of dictionaries
+                    llm_cols = ["property_id", "location", "environ",
+                                "features"]  # shorten the columns used for faster results
+                    llm_input = matched_df[llm_cols].to_dict(
+                        orient="records")  # turn the dataframe into a list of dictionaries
                     prompt = "For each property, suggest 3 fun and relevant activities. Respond only with valid JSON as a list of objects. Each object must have property_id and suggested_activities."
 
                     time.sleep(3)
@@ -356,7 +321,7 @@ class NestApp:
 
                         try:
                             parsed = json.loads(raw_text)
-                        except json.JSONDecodeError:    # if parsing is not possible, then the first instance of JSON is attempted to be found
+                        except json.JSONDecodeError:  # if parsing is not possible, then the first instance of JSON is attempted to be found
                             match = re.search(r"\{.*\}|\[.*\]", raw_text, re.DOTALL)
                             if match:
                                 try:
@@ -367,7 +332,7 @@ class NestApp:
                         if parsed:
                             break
                         else:
-                            print(f"⚠️ JSON parse failed (attempt {attempt+1}/3). Retrying...")
+                            print(f"⚠️ JSON parse failed (attempt {attempt + 1}/3). Retrying...")
                             time.sleep(1)
 
                     if not parsed:
@@ -402,6 +367,7 @@ class NestApp:
                     print("Not a valid response.")
 
     # Option 5: delete a user's records
+    # remove the user information from the file
     def deleteUser(self):
 
         user_id = input("Enter the User ID to delete: ").strip()
@@ -492,8 +458,7 @@ class NestApp:
 
         return top5
 
-
-
+    # Handle user menu input by calling the corresponding function
     def proceedOtherOptions(self, instruction):
         if instruction == "1":
             self.createUser()
@@ -508,7 +473,6 @@ class NestApp:
         else:
             print("Your selection is not valid. Try again!")
 
-
     # Display the main menu
     def displayMenu(self):
         print("""Please enter:
@@ -518,13 +482,3 @@ class NestApp:
             4 to Get recommended properties for an existing profile and (optional) to get suggested activities for your recommended properties,
             5 to Delete an existing user,
             6 to Exit.""")
-
-
-
-
-
-
-
-
-
-

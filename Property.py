@@ -1,7 +1,7 @@
 # It is very likely that you don't need this file
 # I am just putting it here as a backup
 
-
+# Defining the class Property that includes methods to define different attributes in the properties
 class Property:
     def __init__(self, property_id, location, maxPeople, nightly_price, environ, features):
         self.property_id = property_id
@@ -11,23 +11,25 @@ class Property:
         self.environ = environ
         self.features = features
 
+    # Return the property object as a dictionary with all main attributes
     def to_dict(self):
         return {
-            "property_id": self.property_id,
-            "location": self.location,
-            "maxPeople": self.maxPeople,
-            "nightly_price": self.nightly_price,
-            "environ": self.environ,
-            "features": self.features
+            "property_id": self.property_id,  # integer
+            "location": self.location,  # string
+            "maxPeople": self.maxPeople,  # integer
+            "nightly_price": self.nightly_price,  # integer
+            "environ": self.environ,  # list
+            "features": self.features  # list
         }
 
+    # Create a Property object from a dictionary containing all main attributes
     @classmethod
     def from_dict(cls, data):
         return cls(
-            property_id = data["property_id"],
-            location = data['location'],
-            maxPeople= data['maxPeople'],
-            nightly_price = data['nightly_price'],
-            environ = data['environ'],
-            features = data["features"],
+            property_id=data["property_id"],
+            location=data['location'],
+            maxPeople=data['maxPeople'],
+            nightly_price=data['nightly_price'],
+            environ=data['environ'],
+            features=data["features"],
         )
