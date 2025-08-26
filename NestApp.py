@@ -286,8 +286,7 @@ class NestApp:
     # and (optionally) generate suggested activities for each top property using the LLM
     def matchUser(self):
         user_id = input("Enter your UID: ")
-        user_found = self.userProfileManagement.find_user(
-            user_id)  # we can use find_user method in userProfileManagement to locate a user very easily
+        user_found = self.userProfileManagement.find_user(user_id)  # we can use find_user method in userProfileManagement to locate a user very easily
         if user_found is None:
             print("Come back when you recall your UID!")
         else:
@@ -299,29 +298,45 @@ class NestApp:
             while True:
                 answer = input("Would you like to see suggested activities for your top properties? (y/n) ")
                 if answer == "y":
-                    llm_cols = ["property_id", "location", "environ",
-                                "features"]  # shorten the columns used for faster results
-                    llm_input = matched_df[llm_cols].to_dict(
-                        orient="records")  # turn the dataframe into a list of dictionaries
-                    prompt = "For each property, suggest 3 fun and relevant activities. Respond only with valid JSON as a list of objects. Each object must have property_id and suggested_activities."
+                    llm_cols = ["property_id", "location", "environ", "features"]  # shorten the columns used for faster results
+                    llm_input = matched_df[llm_cols].to_dict(orient="records")  # turn the dataframe into a list of dictionaries
+                    prompt = """
+                    You are an assistant that generates vacation activity recommendations.
+                    INPUT: A list of properties, where each property has:
+                    - property_id (string or number)
+                    - location (city or region)
+                    - environ (environment type, e.g. beach, city, mountain, countryside)
+                    - features (key features of the property)
+                    TASK: For each property, suggest exactly 3 fun and relevant activities that guests would likely enjoy given the location, environment, and features.
+                    RESPONSE FORMAT: Return ONLY valid JSON. Respond as a JSON array of objects, where each object has this exact structure:
+                    {\n"
+                    "  \"property_id\": <same value as input property_id>,\n"
+                    "  \"suggested_activities\": [\n"
+                    "    \"<short activity description>\",\n"
+                    "    \"<short activity description>\",\n"
+                    "    \"<short activity description>\"\n"
+                    "  ]\n"
+                    "}
+                    "NOTES:\n"
+                    "- Do not include any explanations, commentary, or extra text outside the JSON.\n"
+                    "- Always keep 'suggested_activities' as a list of exactly 3 strings.\n"
+                    """
 
-                    time.sleep(3)
+                    time.sleep(1)
                     print("Generating suggested activities...")
 
-                    # trying with the time library 3 times to call the LLM and generate activities
                     parsed = None
+                    # trying with the time library 3 times to call the LLM and generate activities
                     for attempt in range(3):
                         result = llm_suggest_activities(self, properties=llm_input, user_prompt=prompt)
                         raw_text = result.get("raw", json.dumps(result)).strip()
-                        raw_text = str(raw_text).replace("json", "").strip()
 
-                        # using regex to remove code fences that will cause problems with parsing later
-                        raw_text = re.sub(r"^```(?:json)?", "", raw_text, flags=re.IGNORECASE).strip()
-                        raw_text = re.sub(r"```$", "", raw_text).strip()
+                        # clean LLM wrappers in the text
+                        raw_text = raw_text.replace("```json", "").replace("```", "").strip()
 
                         try:
                             parsed = json.loads(raw_text)
-                        except json.JSONDecodeError:  # if parsing is not possible, then the first instance of JSON is attempted to be found
+                        except json.JSONDecodeError:    # if parsing is not possible, then the first instance of JSON is attempted to be found
                             match = re.search(r"\{.*\}|\[.*\]", raw_text, re.DOTALL)
                             if match:
                                 try:
@@ -332,12 +347,21 @@ class NestApp:
                         if parsed:
                             break
                         else:
-                            print(f"⚠️ JSON parse failed (attempt {attempt + 1}/3). Retrying...")
+                            print(f"⚠️ JSON parse failed (attempt {attempt+1}/3). Retrying...")
                             time.sleep(1)
 
+                    # print("\n--- RAW LLM RESPONSE ---")
+                    # print(raw_text)
+                    # print("\n--- PARSED JSON ---")
+                    # print(parsed)
+
                     if not parsed:
-                        print("❌ Could not fetch valid suggested activities after 3 tries.")
-                        return
+                        print("⚠️ Could not fetch valid suggested activities after 3 tries.")   # this is if the three tries above fail
+                        parsed = []  # ensure fallback still works
+
+                    if isinstance(parsed, dict) and "error" in parsed:
+                        print("⚠️ LLM request failed due to rate limit. Falling back to generic activities.")   # this is if we've made too many requests to the llm
+                        parsed = []
 
                     # if parsing is successful, then make it a list of dicts
                     if isinstance(parsed, dict):
@@ -347,19 +371,28 @@ class NestApp:
                     else:
                         properties_with_activities_list = []
 
-                    # then display the result
+                    # fallback generic activities
+                    generic_activities = ["Stroll the streets and do some sightseeing", "Try some local cuisine", "Do some shopping at nearby malls", "Go for a relaxing outdoor walk"]
+
+                    # display results
                     for row in matched_df.itertuples():
                         prop_id = str(row.property_id)  # force string for consistency
                         final_activities_list = []
                         for a in properties_with_activities_list:
                             if str(a.get("property_id")) == prop_id:
-                                final_activities_list.extend(a.get("suggested_activities", []))
+                                acts = a.get("suggested_activities") or a.get("activities") or []
+                                if isinstance(acts, list):
+                                    final_activities_list.extend(acts)
+                                elif isinstance(acts, str):
+                                    final_activities_list.append(acts)
+
                         print(f"\nProperty ID {prop_id} in {row.location}:")
                         if final_activities_list:
                             for activity in final_activities_list:
                                 print(f" - {activity}")
                         else:
-                            print(" No activities found!")
+                            for activity in generic_activities:
+                                print(f" - {activity}")
                     break
                 elif answer == "n":
                     break
