@@ -12,8 +12,7 @@
 
 ## Purpose of this application
 
-A group of MMA students just graduated. After a hardworking year of study, the class decides to take a vacation
-together.
+A group of MMA students just graduated. After a hardworking year of study, the class decides to take a vacation together.
 They have a budget and know what kind of environments they want to be greeted.
 With their analytics background, they want to find their dream property using a data-driven way.
 This app helps them find their best match.
@@ -89,11 +88,11 @@ Nest
 3. LLM Function Dependency
    - Get a free API key from OpenRouter.ai
    - You will be prompted to enter the key when running scripts that use LLMs
-4. Program Design Flow and Recommender Logic 
-   - You can visit the following link to get a visual explanation for the design flow and recommender logic 
+4. Program Design Flow and Recommender Logic
+   - You can visit the following link to get a visual explanation for the design flow and recommender logic
    ```
     https://docs.google.com/presentation/d/13v2tIZU_ZfdbzA7tE8fB_QC5y1uABBOhgPn3O5wBYtU/edit?usp=sharing
-   ``` 
+   ```
 
 ## Usage
 
@@ -217,3 +216,7 @@ Example
   - Ensure your OpenRouter API key is active and correct.
 - `429 Too many requests`
   - Too many requests have been made to the LLM. Please wait for a while before trying again. In the meantime, fallback generic activities will be shown.
+
+## Work Cited
+
+OpenAI. (2025). <i>ChatGPT (GPT-5)</i> [Large language model]. https://chat.openai.com/chat

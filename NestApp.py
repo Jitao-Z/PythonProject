@@ -373,6 +373,14 @@ class NestApp:
                         # clean LLM wrappers in the text
                         raw_text = raw_text.replace("```json", "").replace("```", "").strip()
 
+                        """
+                        Part of the following code was adapted from...
+                        *    Title: ChatGPT
+                        *    Author: OpenAI
+                        *    Date: 2025
+                        *    Code version: GPT-5
+                        *    Availability: https://chat.openai.com/chat retrieved in August 2025
+                        """
                         try:
                             parsed = json.loads(raw_text)
                         except json.JSONDecodeError:  # if parsing is not possible, then the first instance of JSON is attempted to be found
