@@ -21,7 +21,7 @@ This app helps them find their best match.
 ## What does this application do?
 
 Nest is a Python-based application that simulates an **Airbnb-like property search and recommendation system**.
-It focuses on North American travel destination only. 
+It focuses on North American travel destination only.
 It allows users to create profiles, set their travel preferences (destination, budget, group size, environments,
 features), and get matched with the most suitable properties.
 
@@ -37,15 +37,15 @@ Additionally, it integrates with Large Language Models (LLM) (via OpenRouter API
 - Create, view, edit, and delete user profiles.
 - Store user data in `profiles.json` for persistence.
 - Match users to properties based on:
-    - Destination
-    - Group size
-    - Budget
-    - Preferred environments
-    - Desired features
+  - Destination
+  - Group size
+  - Budget
+  - Preferred environments
+  - Desired features
 - Use **scoring system** to rank properties and return top 5 matches.
 - Integrate with LLMs to:
-    - Generate datasets of property pools (`PropertyPoolGenerator.py`).
-    - Suggest activities for top property recommendations.
+  - Generate datasets of property pools (`PropertyPoolGenerator.py`).
+  - Suggest activities for top property recommendations.
 - Save and reload user and property data automatically.
 
 ---
@@ -83,32 +83,32 @@ Nest
    ```bash
    pip install -r requirements.txt
    ```
-    - Dependencies include:
-        - `pandas`
-        - `requests`
+   - Dependencies include:
+     - `pandas`
+     - `requests`
 3. LLM Function Dependency
-    - Get a free API key from OpenRouter.ai
-    - You will be prompted to enter the key when running scripts that use LLMs
+   - Get a free API key from OpenRouter.ai
+   - You will be prompted to enter the key when running scripts that use LLMs
 
 ## Usage
 
 Run the main application:
 
-  ```bash
-  python main.py
-  ```
+```bash
+python main.py
+```
 
 You will then see the following interactive menu:
 
-  ```
-  Please enter:
-    1 to Add a user,
-    2 to View a user,
-    3 to Edit an existing profile,
-    4 to Get recommended properties for an existing profile and (optional) to get suggested activities for your recommended properties,
-    5 to Delete an existing user,
-    6 to Exit.
-  ```
+```
+Please enter:
+  1 to Add a user,
+  2 to View a user,
+  3 to Edit an existing profile,
+  4 to Get recommended properties for an existing profile and (optional) to get suggested activities for your recommended properties,
+  5 to Delete an existing user,
+  6 to Exit.
+```
 
 Example workflow:
 
@@ -118,13 +118,13 @@ Example workflow:
 
 ## Scripts Overview
 
-- ` main.py ` – Entry point; runs the app.
-- ` NestApp.py ` – Core logic: user management, property matching, menu handling.
-- ` Property.py ` – Property class for storing property attributes.
-- ` User.py ` – User class for storing user preferences and methods for updates.
-- ` UserProfileManagement.py ` – Manage user profiles, including: Loads, saves, adds, deletes, and searches for users.
-- ` PropertyPoolGenerator.py ` – Uses LLM to generate property pools (locations, features, environments).
-- ` RandomPropertyGenerator.py ` – Generates a large random property dataset for testing.
+- `main.py` – Entry point; runs the app.
+- `NestApp.py` – Core logic: user management, property matching, menu handling.
+- `Property.py` – Property class for storing property attributes.
+- `User.py` – User class for storing user preferences and methods for updates.
+- `UserProfileManagement.py` – Manage user profiles, including: Loads, saves, adds, deletes, and searches for users.
+- `PropertyPoolGenerator.py` – Uses LLM to generate property pools (locations, features, environments).
+- `RandomPropertyGenerator.py` – Generates a large random property dataset for testing.
 
 ## Matching Algorithm
 
@@ -141,9 +141,9 @@ Each property is scored against a user's profile based on:
 The system uses OpenRouter API for:
 
 1. Property Pool Generation
-    - Generate a list of locations, features, and environments to build property datasets
+   - Generate a list of locations, features, and environments to build property datasets
 2. Activity Suggestions
-    - Given the top 5 matched properties, LLM suggests 3 fun and relevant activities for each property
+   - Given the top 5 matched properties, LLM suggests 3 fun and relevant activities for each property
 
 Example
 
@@ -161,7 +161,7 @@ Example
 - Top Match Output
 
 | Property ID | Location | Nightly Price | Environ                                                                                       | Features                                                                                                                                 | Score |
-|-------------|----------|---------------|-----------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|-------|
+| ----------- | -------- | ------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ----- |
 | 1757        | Portland | 174           | [secluded, lakeside, historic home, golf course nearby, clifftop, vineyard, secluded cottage] | [shampoo and soap, outdoor furniture, pet friendly, breakfast included, sea view, fireplace, wifi, heating, air conditioning, game room] | 84    |
 | 5430        | Portland | 136           | [castle, clifftop, wildlife viewing location, mountain, secluded cottage, secluded]           | [wifi, kitchen, smart tv, balcony, private parking, breakfast included, mountain view, bbq grill]                                        | 84    |
 | 5907        | Portland | 153           | [waterfront, stroller accessible, clifftop]                                                   | [wifi, game room, city view, outdoor furniture, smart tv, heating, smoking allowed, dishwasher, mountain view, sofa]                     | 80    |
@@ -169,40 +169,46 @@ Example
 | 3969        | Portland | 225           | [wildlife viewing location, seaside, treehouse, farmhouse, island]                            | [kitchen, smoking allowed, towels included, mountain view, dishwasher, outdoor furniture, hot tub, balcony, sea view]                    | 80    |
 
 - LLM Suggested Activities
+
   ```markdown
-   Property ID 1757 in Portland:
-   - Enjoy a peaceful lakeside picnic with scenic views
-   - Play a round of golf at the nearby course
-   - Explore the historic home and its surroundings for a glimpse into the past
+  Property ID 1757 in Portland:
 
-   Property ID 5430 in Portland:
-   - Take in breathtaking views from the clifftop castle
-   - Go wildlife spotting in the secluded mountain area
-   - Host a BBQ on the balcony with mountain vistas
+  - Enjoy a peaceful lakeside picnic with scenic views
+  - Play a round of golf at the nearby course
+  - Explore the historic home and its surroundings for a glimpse into the past
 
-   Property ID 5907 in Portland:
-   - Relax by the waterfront with a book or a picnic
-   - Challenge friends or family to games in the game room
-   - Enjoy the city and mountain views from the clifftop location
+  Property ID 5430 in Portland:
 
-   Property ID 4035 in Portland:
-   - Take your dog for a hike in the surrounding mountain trails
-   - Cozy up by the fireplace after a day of farm activities
-   - Cook a farm-to-table meal using local produce in the kitchen
+  - Take in breathtaking views from the clifftop castle
+  - Go wildlife spotting in the secluded mountain area
+  - Host a BBQ on the balcony with mountain vistas
 
-   Property ID 3969 in Portland:
-   - Unwind in the hot tub while enjoying seaside views
-   - Explore the island and its wildlife for a nature adventure
-   - Have a relaxing evening on the balcony with a view of the sea
+  Property ID 5907 in Portland:
 
+  - Relax by the waterfront with a book or a picnic
+  - Challenge friends or family to games in the game room
+  - Enjoy the city and mountain views from the clifftop location
+
+  Property ID 4035 in Portland:
+
+  - Take your dog for a hike in the surrounding mountain trails
+  - Cozy up by the fireplace after a day of farm activities
+  - Cook a farm-to-table meal using local produce in the kitchen
+
+  Property ID 3969 in Portland:
+
+  - Unwind in the hot tub while enjoying seaside views
+  - Explore the island and its wildlife for a nature adventure
+  - Have a relaxing evening on the balcony with a view of the sea
   ```
 
 ## Troubleshooting
 
 - `ValueError: No content returned from the API!`
-    - Check API key and model name in `PropertyPoolGenertor.py`
+  - Check API key and model name in `PropertyPoolGenertor.py`
 - `json.decoder.JSONDecodeError`
-    - The LLM sometimes returns invalid JSON; the script reties automatically.
+  - The LLM sometimes returns invalid JSON; the script reties automatically.
 - `401 Unauthorized`
-    - Ensure your OpenRouter API key is active and correct.
-
+  - Ensure your OpenRouter API key is active and correct.
+- `429 Too many requests`
+  - Too many requests have been made to the LLM. Please wait for a while before trying again. In the meantime, fallback generic activities will be shown.
