@@ -89,6 +89,11 @@ Nest
 3. LLM Function Dependency
    - Get a free API key from OpenRouter.ai
    - You will be prompted to enter the key when running scripts that use LLMs
+4. Program Design Flow and Recommender Logic 
+   - You can visit the following link to get a visual explanation for the design flow and recommender logic 
+   ```
+    https://docs.google.com/presentation/d/13v2tIZU_ZfdbzA7tE8fB_QC5y1uABBOhgPn3O5wBYtU/edit?usp=sharing
+   ``` 
 
 ## Usage
 
