@@ -81,5 +81,23 @@
             "kitchen",
             "2 bedroom"
         ]
+    },
+    {
+        "user_id": "51d44ea9-ec65-496d-9a27-538da2257da2",
+        "name": "jason",
+        "destination": "Vancouver",
+        "group_size": 5,
+        "budget": 450.0,
+        "preferred_environment": [
+            "a",
+            "b",
+            "c",
+            "d"
+        ],
+        "features": [
+            "ab",
+            "c",
+            "d"
+        ]
     }
 ]

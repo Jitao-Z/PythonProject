@@ -103,7 +103,7 @@ class NestApp:
         # to begin the program
         self.userProfileManagement = UserProfileManagement(users_path)
         self.userProfileManagement.users = self.userProfileManagement.load_users()
-        print(f"Welcome to Nest! Loaded {len(self.userProfileManagement.users)} users from {users_path} successfully.")
+        print(f"\nWelcome to Nest! Loaded {len(self.userProfileManagement.users)} users from {users_path} successfully.")
 
     # Run the Program and prompt the user to select an option to proceed
     def run(self):
@@ -154,15 +154,38 @@ class NestApp:
             except ValueError:
                 print("⚠️ Please input a number.")
 
-        print("Enter the characteristics of your preferred environment (e.g. quiet, beachfront) (comma separated): ")
-        environ_input = input()
-        environ_list = [env.strip().lower() for env in environ_input.split(",")]
-        print("Your selected environments:", environ_list)
+        # print("Enter at least three characteristics of your preferred environment (e.g. quiet, beachfront, chill) (comma separated): ")
+        # environ_input = input()
+        # environ_list = [env.strip().lower() for env in environ_input.split(",")]
+        # print("Your selected environments:", environ_list)
+        while True:
+            print("Enter at least three characteristics of your preferred environment (e.g. quiet, beachfront, chill) (comma separated): ")
+            environ_input = input()
+            environ_list = [env.strip().lower() for env in environ_input.split(",") if env.strip()]
 
-        print("Enter the features you want in your home (e.g. wifi, microwave oven) (comma separated): ")
-        feature_input = input()
-        feature_list = [fea.strip().lower() for fea in feature_input.split(",")]
-        print("Your selected features:", feature_list)
+            if len(environ_list) < 3:
+                print("⚠️ Please enter at least three characteristics.")
+                continue
+
+            print("Your selected environments:", environ_list)
+            break
+
+
+        # print("Enter at least three features you want in your home (e.g. wifi, microwave oven, kitchen) (comma separated): ")
+        # feature_input = input()
+        # feature_list = [fea.strip().lower() for fea in feature_input.split(",")]
+        # print("Your selected features:", feature_list)
+        while True:
+            print("Enter at least three features you want in your home (e.g. wifi, microwave oven, kitchen) (comma separated): ")
+            feature_input = input()
+            feature_list = [fea.strip().lower() for fea in feature_input.split(",") if fea.strip()]
+
+            if len(feature_list) < 3:
+                print("⚠️ Please enter at least three characteristics.")
+                continue
+
+            print("Your selected features:", feature_list)
+            break
 
         user = User(user_id=str(uuid.uuid4()), name=name, destination=destination, group_size=size, budget=budget,
                     pre_environ=environ_list, features=feature_list)
@@ -188,7 +211,6 @@ class NestApp:
                 print(f"Preferred Environment: {', '.join(user.pre_environ)}")
                 print(f"Features: {', '.join(user.features)}")
                 print("-" * 40)
-                print("\n")
                 return
 
             print(
@@ -252,20 +274,89 @@ class NestApp:
                         else:
                             print("⚠️ Please enter a valid input.")
 
-                    print(
-                        "Enter the new characteristics of your preferred environment (e.g. quiet, beachfront) (comma separated)."
-                        , "Enter 0 if you don't want to change this field.")
-                    env = input().lower()
-                    env_list = [e.strip() for e in env.split(",") if e.strip()]
-                    if env != "0":
-                        self.userProfileManagement.edit_user_pref_environ(u, env_list)
 
-                    print("Enter the new features you want in your home (e.g. wifi, microwave oven) (comma separated)."
-                          , "Enter 0 if you don't want to change field.")
-                    features = input().lower()
-                    feature_list = [feature.strip() for feature in features.split(",") if feature.strip()]
-                    if features != "0":
+                    # safeguard at least 3 characteristics required
+                    # print(
+                    #     "Enter at least three new characteristics of your preferred environment (e.g. quiet, beachfront, chill) (comma separated)."
+                    #     , "Enter 0 if you don't want to change this field.")
+                    # env = input().lower()
+                    # env_list = [e.strip() for e in env.split(",") if e.strip()]
+                    # if env != "0":
+                    #     self.userProfileManagement.edit_user_pref_environ(u, env_list)
+
+                    # while True:
+                    #     print(
+                    #         "Enter at least three new characteristics of your preferred environment (e.g. quiet, beachfront, chill) (comma separated)."
+                    #         , "Enter 0 if you don't want to change this field.")
+                    #     env = input().lower()
+                    #     env_list = [e.strip() for e in env.split(",") if e.strip()]
+                    #     if env != "0":
+                    #         self.userProfileManagement.edit_user_pref_environ(u, env_list)
+                    #     if len(env_list) < 3:
+                    #         print("⚠️ Please enter at least three characteristics.")
+                    #         continue
+                    #     else: break
+
+                    while True:
+                        print(
+                            "Enter at least three new characteristics of your preferred environment "
+                            "(comma separated, e.g. quiet, beachfront, chill). "
+                            "Enter 0 if you don't want to change this field."
+                        )
+                        env = input().lower()
+
+                        if env == "0":
+                            break
+
+                        env_list = [e.strip() for e in env.split(",") if e.strip()]
+
+                        if len(env_list) < 3:
+                            print("⚠️ Please enter at least three characteristics.")
+                            continue
+
+                        self.userProfileManagement.edit_user_pref_environ(u, env_list)
+                        break
+
+
+                    # print("Enter the new features you want in your home (e.g. wifi, microwave oven) (comma separated)."
+                    #       , "Enter 0 if you don't want to change field.")
+                    # features = input().lower()
+                    # feature_list = [feature.strip() for feature in features.split(",") if feature.strip()]
+                    # if features != "0":
+                    #     self.userProfileManagement.edit_user_features(u, feature_list)
+
+                    # while True:
+                    #     print(
+                    #         "Enter at least three new features you want in your home (e.g. wifi, microwave oven, air conditioning) (comma separated)."
+                    #       , "Enter 0 if you don't want to change field.")
+                    #     features = input().lower()
+                    #     feature_list = [feature.strip() for feature in features.split(",") if feature.strip()]
+                    #     if features != "0":
+                    #         self.userProfileManagement.edit_user_features(u, feature_list)
+                    #     if len(feature_list) < 3:
+                    #         print("⚠️ Please enter at least three characteristics.")
+                    #         continue
+                    #     else: break
+                    while True:
+                        print(
+                            "Enter at least three new features you want in your home "
+                            "(e.g. wifi, microwave oven, air conditioning) (comma separated). "
+                            "Enter 0 if you don't want to change this field."
+                        )
+                        features = input().lower()
+
+                        if features == "0":
+                            break
+
+                        feature_list = [feature.strip() for feature in features.split(",") if feature.strip()]
+
+                        if len(feature_list) < 3:
+                            print("⚠️ Please enter at least three characteristics.")
+                            continue
+
                         self.userProfileManagement.edit_user_features(u, feature_list)
+                        break
+
 
                     print(f"\nEdits made to UID: {u.user_id}")
                     print("=" * 40)
@@ -508,7 +599,7 @@ class NestApp:
 
     # Display the main menu
     def displayMenu(self):
-        print("""Please enter:
+        print("""\nPlease enter:
             1 to Add a user,
             2 to View a user,
             3 to Edit an existing profile,
