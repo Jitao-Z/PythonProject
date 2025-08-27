@@ -89,15 +89,14 @@
         "group_size": 5,
         "budget": 450.0,
         "preferred_environment": [
-            "a",
-            "b",
-            "c",
-            "d"
+            "quiet",
+            "lake",
+            "kayak"
         ],
         "features": [
-            "ab",
-            "c",
-            "d"
+            "wifi",
+            "fridge",
+            "air conditioning"
         ]
     }
 ]

@@ -1,6 +1,3 @@
-# It is very likely that you don't need this file
-# I am just putting it here as a backup
-
 # Defining the class Property that includes methods to define different attributes in the properties
 class Property:
     def __init__(self, property_id, location, maxPeople, nightly_price, environ, features):

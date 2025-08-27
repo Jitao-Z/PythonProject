@@ -24,7 +24,7 @@ def load_properties(self, path):
 
 # LLM Preparations
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
-#MODEL = "deepseek/deepseek-chat-v3-0324:free"
+# MODEL = "deepseek/deepseek-chat-v3-0324:free"
 MODEL = "z-ai/glm-4.5-air:free"
 
 # Safely input your key (won't echo in Colab)
@@ -86,25 +86,12 @@ class NestApp:
         llm_gen_prop_path = './data/LLM_Generated_Properties.json'  # to read and use LLM Generated Properties
         self.properties = load_properties(self,
                                           llm_gen_prop_path)
-        # self.properties = generate_properties()
-
-        # Whether to load previously auto-saved users
-        # choice = input("Welcome to Nest! Would you like to load previously saved users? (y/n): ").lower()
-        # if choice == "y":
-        #     self.userProfileManagement = UserProfileManagement(users_path)
-        #     self.userProfileManagement.users = self.userProfileManagement.load_users()
-        #     print(f"Loaded {len(self.userProfileManagement.users)} users from {users_path}.")
-        # else:
-        #     self.userProfileManagement = UserProfileManagement(users_path)
-        #     self.userProfileManagement.users = []
-        #     with open(users_path, "w") as f:
-        #         json.dump([], f)
-        #     print("Starting with a new user management.")
 
         # to begin the program
         self.userProfileManagement = UserProfileManagement(users_path)
         self.userProfileManagement.users = self.userProfileManagement.load_users()
-        print(f"\nWelcome to Nest! Loaded {len(self.userProfileManagement.users)} users from {users_path} successfully.")
+        print(
+            f"\nWelcome to Nest! Loaded {len(self.userProfileManagement.users)} users from {users_path} successfully.")
 
     # Run the Program and prompt the user to select an option to proceed
     def run(self):
@@ -155,12 +142,10 @@ class NestApp:
             except ValueError:
                 print("⚠️ Please input a number.")
 
-        # print("Enter at least three characteristics of your preferred environment (e.g. quiet, beachfront, chill) (comma separated): ")
-        # environ_input = input()
-        # environ_list = [env.strip().lower() for env in environ_input.split(",")]
-        # print("Your selected environments:", environ_list)
+        # to ensure user to input at least three preferred environments for the recommender logic
         while True:
-            print("Enter at least three characteristics of your preferred environment (e.g. quiet, beachfront, chill) (comma separated): ")
+            print(
+                "Enter at least three characteristics of your preferred environments (e.g. quiet, beachfront, chill) (comma separated): ")
             environ_input = input()
             environ_list = [env.strip().lower() for env in environ_input.split(",") if env.strip()]
 
@@ -171,13 +156,10 @@ class NestApp:
             print("Your selected environments:", environ_list)
             break
 
-
-        # print("Enter at least three features you want in your home (e.g. wifi, microwave oven, kitchen) (comma separated): ")
-        # feature_input = input()
-        # feature_list = [fea.strip().lower() for fea in feature_input.split(",")]
-        # print("Your selected features:", feature_list)
+        # to ensure user to input at least three preferred features for the recommender logic
         while True:
-            print("Enter at least three features you want in your home (e.g. wifi, microwave oven, kitchen) (comma separated): ")
+            print(
+                "Enter at least three features you want in your home (e.g. wifi, microwave oven, kitchen) (comma separated): ")
             feature_input = input()
             feature_list = [fea.strip().lower() for fea in feature_input.split(",") if fea.strip()]
 
@@ -275,29 +257,6 @@ class NestApp:
                         else:
                             print("⚠️ Please enter a valid input.")
 
-
-                    # safeguard at least 3 characteristics required
-                    # print(
-                    #     "Enter at least three new characteristics of your preferred environment (e.g. quiet, beachfront, chill) (comma separated)."
-                    #     , "Enter 0 if you don't want to change this field.")
-                    # env = input().lower()
-                    # env_list = [e.strip() for e in env.split(",") if e.strip()]
-                    # if env != "0":
-                    #     self.userProfileManagement.edit_user_pref_environ(u, env_list)
-
-                    # while True:
-                    #     print(
-                    #         "Enter at least three new characteristics of your preferred environment (e.g. quiet, beachfront, chill) (comma separated)."
-                    #         , "Enter 0 if you don't want to change this field.")
-                    #     env = input().lower()
-                    #     env_list = [e.strip() for e in env.split(",") if e.strip()]
-                    #     if env != "0":
-                    #         self.userProfileManagement.edit_user_pref_environ(u, env_list)
-                    #     if len(env_list) < 3:
-                    #         print("⚠️ Please enter at least three characteristics.")
-                    #         continue
-                    #     else: break
-
                     while True:
                         print(
                             "Enter at least three new characteristics of your preferred environment "
@@ -318,26 +277,6 @@ class NestApp:
                         self.userProfileManagement.edit_user_pref_environ(u, env_list)
                         break
 
-
-                    # print("Enter the new features you want in your home (e.g. wifi, microwave oven) (comma separated)."
-                    #       , "Enter 0 if you don't want to change field.")
-                    # features = input().lower()
-                    # feature_list = [feature.strip() for feature in features.split(",") if feature.strip()]
-                    # if features != "0":
-                    #     self.userProfileManagement.edit_user_features(u, feature_list)
-
-                    # while True:
-                    #     print(
-                    #         "Enter at least three new features you want in your home (e.g. wifi, microwave oven, air conditioning) (comma separated)."
-                    #       , "Enter 0 if you don't want to change field.")
-                    #     features = input().lower()
-                    #     feature_list = [feature.strip() for feature in features.split(",") if feature.strip()]
-                    #     if features != "0":
-                    #         self.userProfileManagement.edit_user_features(u, feature_list)
-                    #     if len(feature_list) < 3:
-                    #         print("⚠️ Please enter at least three characteristics.")
-                    #         continue
-                    #     else: break
                     while True:
                         print(
                             "Enter at least three new features you want in your home "
@@ -358,7 +297,6 @@ class NestApp:
                         self.userProfileManagement.edit_user_features(u, feature_list)
                         break
 
-
                     print(f"\nEdits made to UID: {u.user_id}")
                     print("=" * 40)
                     print(f"Updated Name: {u.name}")
@@ -378,7 +316,8 @@ class NestApp:
     # and (optionally) generate suggested activities for each top property using the LLM
     def matchUser(self):
         user_id = input("Enter your UID: ")
-        user_found = self.userProfileManagement.find_user(user_id)  # we can use find_user method in userProfileManagement to locate a user very easily
+        user_found = self.userProfileManagement.find_user(
+            user_id)  # we can use find_user method in userProfileManagement to locate a user very easily
         if user_found is None:
             print("Come back when you recall your UID!")
         else:
@@ -390,8 +329,10 @@ class NestApp:
             while True:
                 answer = input("Would you like to see suggested activities for your top properties? (y/n) ")
                 if answer == "y":
-                    llm_cols = ["property_id", "location", "environ", "features"]  # shorten the columns used for faster results
-                    llm_input = matched_df[llm_cols].to_dict(orient="records")  # turn the dataframe into a list of dictionaries
+                    llm_cols = ["property_id", "location", "environ",
+                                "features"]  # shorten the columns used for faster results
+                    llm_input = matched_df[llm_cols].to_dict(
+                        orient="records")  # turn the dataframe into a list of dictionaries
                     prompt = """
                     You are an assistant that generates vacation activity recommendations.
                     INPUT: A list of properties, where each property has:
@@ -421,7 +362,7 @@ class NestApp:
                     # trying with the time library 2 times to call the LLM and generate activities
                     for attempt in range(2):
                         result = llm_suggest_activities(self, properties=llm_input, user_prompt=prompt)
-                        
+
                         if isinstance(result, dict):
                             raw_text = result.get("raw", json.dumps(result)).strip()
                         elif isinstance(result, list):
@@ -434,7 +375,7 @@ class NestApp:
 
                         try:
                             parsed = json.loads(raw_text)
-                        except json.JSONDecodeError:    # if parsing is not possible, then the first instance of JSON is attempted to be found
+                        except json.JSONDecodeError:  # if parsing is not possible, then the first instance of JSON is attempted to be found
                             match = re.search(r"\{.*\}|\[.*\]", raw_text, re.DOTALL)
                             if match:
                                 try:
@@ -445,16 +386,13 @@ class NestApp:
                         if parsed:
                             break
                         else:
-                            print(f"⚠️ JSON parse failed (attempt {attempt+1}/2). Retrying...")
+                            print(f"⚠️ JSON parse failed (attempt {attempt + 1}/2). Retrying...")
                             time.sleep(1)
 
-                    # print("\n--- RAW LLM RESPONSE ---")
-                    # print(raw_text)
-                    # print("\n--- PARSED JSON ---")
-                    # print(parsed)
-
+                    # safeguarding the code to ensure the LLM can generate suggested activities
                     if not parsed:
-                        print("⚠️ Could not fetch valid suggested activities after 2 tries.")   # this is if the two tries above fail
+                        print(
+                            "⚠️ Could not fetch valid suggested activities after 2 tries.")  # this is if the two tries above fail
                         parsed = []  # ensure fallback still works
 
                     if isinstance(parsed, dict) and "error" in parsed:
@@ -472,7 +410,9 @@ class NestApp:
                         properties_with_activities_list = []
 
                     # fallback generic activities in case LLM fails
-                    generic_activities = ["Stroll the streets and do some sightseeing", "Try some local cuisine at a nearby restaurant", "Go for a relaxing outdoor walk"]
+                    generic_activities = ["Stroll the streets and do some sightseeing",
+                                          "Try some local cuisine at a nearby restaurant",
+                                          "Go for a relaxing outdoor walk"]
 
                     # display results
                     for row in matched_df.itertuples():
