@@ -24,7 +24,8 @@ def load_properties(self, path):
 
 # LLM Preparations
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
-MODEL = "deepseek/deepseek-chat-v3-0324:free"
+#MODEL = "deepseek/deepseek-chat-v3-0324:free"
+MODEL = "z-ai/glm-4.5-air:free"
 
 # Safely input your key (won't echo in Colab)
 API_KEY = getpass.getpass("Enter your OpenRouter API key (input is hidden): ").strip()
@@ -417,10 +418,16 @@ class NestApp:
                     print("Generating suggested activities...")
 
                     parsed = None
-                    # trying with the time library 3 times to call the LLM and generate activities
-                    for attempt in range(3):
+                    # trying with the time library 2 times to call the LLM and generate activities
+                    for attempt in range(2):
                         result = llm_suggest_activities(self, properties=llm_input, user_prompt=prompt)
-                        raw_text = result.get("raw", json.dumps(result)).strip()
+                        
+                        if isinstance(result, dict):
+                            raw_text = result.get("raw", json.dumps(result)).strip()
+                        elif isinstance(result, list):
+                            raw_text = json.dumps(result).strip()
+                        else:
+                            raw_text = str(result).strip()
 
                         # clean LLM wrappers in the text
                         raw_text = raw_text.replace("```json", "").replace("```", "").strip()
@@ -438,7 +445,7 @@ class NestApp:
                         if parsed:
                             break
                         else:
-                            print(f"⚠️ JSON parse failed (attempt {attempt+1}/3). Retrying...")
+                            print(f"⚠️ JSON parse failed (attempt {attempt+1}/2). Retrying...")
                             time.sleep(1)
 
                     # print("\n--- RAW LLM RESPONSE ---")
@@ -447,11 +454,13 @@ class NestApp:
                     # print(parsed)
 
                     if not parsed:
-                        print("⚠️ Could not fetch valid suggested activities after 3 tries.")   # this is if the three tries above fail
+                        print("⚠️ Could not fetch valid suggested activities after 2 tries.")   # this is if the two tries above fail
                         parsed = []  # ensure fallback still works
 
                     if isinstance(parsed, dict) and "error" in parsed:
-                        print("⚠️ LLM request failed due to rate limit. Falling back to generic activities.")   # this is if we've made too many requests to the llm
+                        print(f"⚠️ LLM request failed: {parsed['error']}")
+                        if "details" in parsed:
+                            print(f"Details: {parsed['details']}")
                         parsed = []
 
                     # if parsing is successful, then make it a list of dicts
@@ -462,8 +471,8 @@ class NestApp:
                     else:
                         properties_with_activities_list = []
 
-                    # fallback generic activities
-                    generic_activities = ["Stroll the streets and do some sightseeing", "Try some local cuisine", "Do some shopping at nearby malls", "Go for a relaxing outdoor walk"]
+                    # fallback generic activities in case LLM fails
+                    generic_activities = ["Stroll the streets and do some sightseeing", "Try some local cuisine at a nearby restaurant", "Go for a relaxing outdoor walk"]
 
                     # display results
                     for row in matched_df.itertuples():
